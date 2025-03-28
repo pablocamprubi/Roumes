@@ -256,6 +256,22 @@
         import { supabase } from './js/supabase.js';
         import config from './js/config.js';
 
+        // Check for access token in URL hash and redirect if present
+        const handleOAuthCallback = async () => {
+            const hashParams = new URLSearchParams(window.location.hash.substring(1));
+            const accessToken = hashParams.get('access_token');
+            
+            if (accessToken) {
+                const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+                if (user && !error) {
+                    window.location.href = '/welcome.html';
+                }
+            }
+        };
+
+        // Run OAuth callback check on page load
+        handleOAuthCallback();
+
         // Theme toggle functionality
         const themeToggle = document.querySelector('.theme-toggle');
         const html = document.documentElement;
