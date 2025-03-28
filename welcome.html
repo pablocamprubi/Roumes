@@ -57,12 +57,22 @@
 
         // Check authentication status
         const checkUser = async () => {
+            console.log('Checking user status...');
             const { data: { user }, error } = await supabase.auth.getUser();
-            if (error || !user) {
+            
+            if (error) {
+                console.error('Auth error:', error);
                 window.location.href = '/signin.html';
                 return;
             }
             
+            if (!user) {
+                console.log('No user found, redirecting to signin');
+                window.location.href = '/signin.html';
+                return;
+            }
+            
+            console.log('User authenticated:', user);
             // Display the user's email
             document.getElementById('user-email').textContent = user.email;
         };
