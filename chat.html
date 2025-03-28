@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - Maton</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7"></script>
+    <style>
+        :root[data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #252525;
+            --bg-tertiary: #2d2d2d;
+            --border-color: #333;
+            --text-primary: #ffffff;
+            --text-secondary: #888;
+            --accent-color: #6e8efb;
+            --error-color: #ff4d4d;
+            --chat-bg: #343541;
+            --user-message-bg: #444654;
+            --assistant-message-bg: #343541;
+        }
+
+        :root[data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --bg-tertiary: #eaeaea;
+            --border-color: #e0e0e0;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666;
+            --accent-color: #4c6ef5;
+            --error-color: #dc3545;
+            --chat-bg: #ffffff;
+            --user-message-bg: #f7f7f8;
+            --assistant-message-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 260px;
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .new-chat-btn {
+            margin: 1rem;
+            padding: 0.75rem;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .new-chat-btn:hover {
+            filter: brightness(1.1);
+        }
+
+        .conversations {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .conversation-item {
+            padding: 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            transition: background-color 0.2s;
+        }
+
+        .conversation-item:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .conversation-item.active {
+            background-color: var(--bg-tertiary);
+        }
+
+        .user-profile {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Main Chat Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: var(--chat-bg);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .message {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .message.user {
+            background-color: var(--user-message-bg);
+        }
+
+        .message.assistant {
+            background-color: var(--assistant-message-bg);
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .message-content {
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .chat-input-container {
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--chat-bg);
+        }
+
+        .chat-input-wrapper {
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 1rem;
+            padding-right: 3rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            resize: none;
+            min-height: 56px;
+            max-height: 200px;
+            line-height: 1.5;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .send-button {
+            position: absolute;
+            right: 0.5rem;
+            bottom: 0.5rem;
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .send-button:hover {
+            color: var(--text-primary);
+        }
+
+        .send-button svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <button class="new-chat-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 4V20M4 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            New Chat
+        </button>
+        <div class="conversations" id="conversations-list">
+            <!-- Conversations will be added here dynamically -->
+        </div>
+        <div class="user-profile" id="user-profile">
+            <!-- User profile will be added here dynamically -->
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="chat-messages" id="chat-messages">
+            <!-- Messages will be added here dynamically -->
+        </div>
+        <div class="chat-input-container">
+            <div class="chat-input-wrapper">
+                <textarea class="chat-input" id="chat-input" placeholder="Message Maton..." rows="1"></textarea>
+                <button class="send-button" id="send-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { supabase } from './js/supabase.js';
+
+        let currentUser = null;
+        let conversations = [];
+        let currentConversationId = null;
+
+        // Check authentication status
+        const checkUser = async () => {
+            const { data: { user }, error } = await supabase.auth.getUser();
+            if (error || !user) {
+                window.location.href = '/signin.html';
+                return;
+            }
+            currentUser = user;
+            updateUserProfile();
+            loadConversations();
+        };
+
+        // Update user profile display
+        const updateUserProfile = () => {
+            const userProfileDiv = document.getElementById('user-profile');
+            const initials = currentUser.email.substring(0, 2).toUpperCase();
+            userProfileDiv.innerHTML = `
+                <div class="user-avatar">${initials}</div>
+                <span>${currentUser.email}</span>
+            `;
+        };
+
+        // Load conversations from local storage (will be replaced with database storage)
+        const loadConversations = () => {
+            const storedConversations = localStorage.getItem('conversations');
+            conversations = storedConversations ? JSON.parse(storedConversations) : [];
+            updateConversationsList();
+        };
+
+        // Update conversations list in sidebar
+        const updateConversationsList = () => {
+            const conversationsList = document.getElementById('conversations-list');
+            conversationsList.innerHTML = conversations.map(conv => `
+                <div class="conversation-item ${conv.id === currentConversationId ? 'active' : ''}" 
+                     onclick="selectConversation('${conv.id}')">
+                    ${conv.title}
+                </div>
+            `).join('');
+        };
+
+        // Create a new conversation
+        window.newConversation = () => {
+            const conversation = {
+                id: Date.now().toString(),
+                title: 'New Chat',
+                messages: []
+            };
+            conversations.unshift(conversation);
+            currentConversationId = conversation.id;
+            localStorage.setItem('conversations', JSON.stringify(conversations));
+            updateConversationsList();
+            document.getElementById('chat-messages').innerHTML = '';
+        };
+
+        // Select a conversation
+        window.selectConversation = (conversationId) => {
+            currentConversationId = conversationId;
+            const conversation = conversations.find(c => c.id === conversationId);
+            updateConversationsList();
+            displayMessages(conversation.messages);
+        };
+
+        // Display messages in the chat area
+        const displayMessages = (messages) => {
+            const chatMessages = document.getElementById('chat-messages');
+            chatMessages.innerHTML = messages.map(msg => `
+                <div class="message ${msg.role}">
+                    <div class="message-avatar">${msg.role === 'user' ? currentUser.email.substring(0, 2).toUpperCase() : 'M'}</div>
+                    <div class="message-content">${msg.content}</div>
+                </div>
+            `).join('');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        };
+
+        // Handle sending a message
+        const sendMessage = async () => {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            if (!currentConversationId) {
+                newConversation();
+            }
+
+            const conversation = conversations.find(c => c.id === currentConversationId);
+            conversation.messages.push({
+                role: 'user',
+                content: message
+            });
+
+            // Simulate assistant response (replace with actual API call)
+            conversation.messages.push({
+                role: 'assistant',
+                content: 'This is a simulated response. Replace with actual API integration.'
+            });
+
+            localStorage.setItem('conversations', JSON.stringify(conversations));
+            displayMessages(conversation.messages);
+            input.value = '';
+        };
+
+        // Event listeners
+        document.querySelector('.new-chat-btn').addEventListener('click', newConversation);
+        document.getElementById('send-button').addEventListener('click', sendMessage);
+        document.getElementById('chat-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Auto-resize textarea
+        const chatInput = document.getElementById('chat-input');
+        chatInput.addEventListener('input', () => {
+            chatInput.style.height = 'auto';
+            chatInput.style.height = chatInput.scrollHeight + 'px';
+        });
+
+        // Initialize
+        checkUser();
+    </script>
+</body>
+</html> 
