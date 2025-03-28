@@ -7,23 +7,31 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7"></script>
     <style>
         :root[data-theme="dark"] {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #252525;
-            --border-color: #333;
+            --bg-primary: #000000;
+            --bg-secondary: #ffffff;
             --text-primary: #ffffff;
-            --text-secondary: #888;
-            --accent-color: #6e8efb;
-            --error-color: #ff4d4d;
+            --text-secondary: #888888;
+            --button-bg: #ffffff;
+            --button-text: #000000;
+            --button-hover-bg: #f3f3f3;
+            --input-border: #333333;
+            --input-bg: #111111;
+            --card-bg: #111111;
+            --card-border: #333333;
         }
 
         :root[data-theme="light"] {
             --bg-primary: #ffffff;
-            --bg-secondary: #f5f5f5;
-            --border-color: #e0e0e0;
-            --text-primary: #1a1a1a;
-            --text-secondary: #666;
-            --accent-color: #4c6ef5;
-            --error-color: #dc3545;
+            --bg-secondary: #000000;
+            --text-primary: #000000;
+            --text-secondary: #666666;
+            --button-bg: #000000;
+            --button-text: #ffffff;
+            --button-hover-bg: #333333;
+            --input-border: #e0e0e0;
+            --input-bg: #ffffff;
+            --card-bg: #ffffff;
+            --card-border: #eaeaea;
         }
 
         * {
@@ -37,71 +45,37 @@
             background-color: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
-            transition: background-color 0.3s ease, color 0.3s ease;
             display: flex;
             flex-direction: column;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            background-color: var(--bg-primary);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-decoration: none;
-            color: var(--text-primary);
-        }
-
-        .theme-toggle {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem;
-            color: var(--text-primary);
-            display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .theme-toggle svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
-
-        .main-content {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            transition: all 0.2s ease;
+            line-height: 1.6;
             padding: 2rem;
         }
 
         .signin-container {
-            background-color: var(--bg-secondary);
-            padding: 2rem;
-            border-radius: 12px;
             width: 100%;
             max-width: 400px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 2.5rem;
         }
 
         h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
             text-align: center;
             margin-bottom: 2rem;
-            font-size: 1.8rem;
+            font-size: 0.95rem;
         }
 
         .form-group {
@@ -111,23 +85,35 @@
         label {
             display: block;
             margin-bottom: 0.5rem;
-            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.95rem;
         }
 
         input {
             width: 100%;
             padding: 0.75rem;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--input-border);
             border-radius: 6px;
-            background-color: var(--bg-primary);
+            background-color: var(--input-bg);
             color: var(--text-primary);
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
         }
 
         input:focus {
             outline: none;
-            border-color: var(--accent-color);
+            border-color: var(--text-primary);
+        }
+
+        .forgot-password {
+            float: right;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .forgot-password:hover {
+            color: var(--text-primary);
         }
 
         .button {
@@ -135,33 +121,20 @@
             padding: 0.75rem;
             border: none;
             border-radius: 6px;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            margin-bottom: 1.5rem;
         }
 
         .button.primary {
-            background-color: var(--accent-color);
-            color: white;
+            background-color: var(--button-bg);
+            color: var(--button-text);
         }
 
         .button.primary:hover {
-            filter: brightness(1.1);
-        }
-
-        .button.google {
-            background-color: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .button.google:hover {
-            background-color: var(--bg-secondary);
+            background-color: var(--button-hover-bg);
         }
 
         .divider {
@@ -170,125 +143,117 @@
             text-align: center;
             margin: 1.5rem 0;
             color: var(--text-secondary);
+            font-size: 0.95rem;
         }
 
         .divider::before,
         .divider::after {
             content: '';
             flex: 1;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--input-border);
         }
 
         .divider span {
             padding: 0 1rem;
         }
 
+        .social-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-button {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-button:hover {
+            background: var(--input-bg);
+        }
+
+        .social-button svg {
+            width: 20px;
+            height: 20px;
+        }
+
         .footer-text {
             text-align: center;
-            margin-top: 1.5rem;
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .footer-text a {
-            color: var(--accent-color);
+            color: var(--text-primary);
             text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer-text a:hover {
+            text-decoration: underline;
         }
 
         .error-message {
-            color: var(--error-color);
-            font-size: 0.9rem;
+            color: #ff4444;
+            font-size: 0.875rem;
             margin-top: 0.5rem;
             display: none;
         }
     </style>
 </head>
 <body>
-    <nav>
-        <div class="nav-left">
-            <a href="index.html" class="logo">Roumes</a>
-            <button class="theme-toggle" aria-label="Toggle theme">
-                <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"/>
-                </svg>
-            </button>
-        </div>
-    </nav>
-
-    <div class="main-content">
-        <div class="signin-container">
-            <h1>Sign In</h1>
-            <form id="signin-form" onsubmit="return handleSubmit(event)">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                    <div class="error-message" id="email-error"></div>
-                </div>
-                <div class="form-group">
+    <div class="signin-container">
+        <h1>Welcome back</h1>
+        <p class="subtitle">Login to your Roumes account</p>
+        
+        <form id="signin-form" onsubmit="return handleSubmit(event)">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+                <div class="error-message" id="email-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                    <div class="error-message" id="password-error"></div>
+                    <a href="#" class="forgot-password">Forgot your password?</a>
                 </div>
-                <button type="submit" class="button primary">Sign In</button>
-            </form>
+                <input type="password" id="password" name="password" required>
+                <div class="error-message" id="password-error"></div>
+            </div>
+
+            <button type="submit" class="button primary">Login</button>
 
             <div class="divider">
-                <span>or</span>
+                <span>Or continue with</span>
             </div>
 
-            <button class="button google" onclick="handleGoogleSignIn()">
-                <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285f4"/>
-                    <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34a853"/>
-                    <path d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.549 0 9s.348 2.825.957 4.039l3.007-2.332z" fill="#fbbc05"/>
-                    <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z" fill="#ea4335"/>
-                </svg>
-                Continue with Google
-            </button>
+            <div class="social-buttons">
+                <button type="button" class="social-button" onclick="handleGoogleSignIn()">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
+                    </svg>
+                </button>
+            </div>
 
-            <div class="footer-text">
+            <p class="footer-text">
                 Don't have an account? <a href="signup.html">Sign up</a>
-            </div>
-        </div>
+            </p>
+        </form>
     </div>
 
     <script type="module">
         import { supabase } from './js/supabase.js';
         import config from './js/config.js';
-
-        // Check for access token in URL hash and redirect if present
-        const handleOAuthCallback = async () => {
-            const hashParams = new URLSearchParams(window.location.hash.substring(1));
-            const accessToken = hashParams.get('access_token');
-            
-            if (accessToken) {
-                const { data: { user }, error } = await supabase.auth.getUser(accessToken);
-                if (user && !error) {
-                    window.location.href = '/welcome.html';
-                }
-            }
-        };
-
-        // Run OAuth callback check on page load
-        handleOAuthCallback();
-
-        // Theme toggle functionality
-        const themeToggle = document.querySelector('.theme-toggle');
-        const html = document.documentElement;
-        
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', newTheme);
-            
-            // Update the icon
-            const sunIcon = themeToggle.querySelector('svg');
-            if (newTheme === 'light') {
-                sunIcon.innerHTML = '<path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 0C12.5523 0 13 0.447715 13 1V4C13 4.55228 12.5523 5 12 5C11.4477 5 11 4.55228 11 4V1C11 0.447715 11.4477 0 12 0ZM12 19C12.5523 19 13 19.4477 13 20V23C13 23.5523 12.5523 24 12 24C11.4477 24 11 23.5523 11 23V20C11 19.4477 11.4477 19 12 19ZM3.51472 3.51472C3.90524 3.1242 4.53841 3.1242 4.92893 3.51472L7.05025 5.63604C7.44078 6.02656 7.44078 6.65973 7.05025 7.05025C6.65973 7.44078 6.02656 7.44078 5.63604 7.05025L3.51472 4.92893C3.1242 4.53841 3.1242 3.90524 3.51472 3.51472ZM16.9497 16.9497C17.3403 16.5592 17.9734 16.5592 18.364 16.9497L20.4853 19.0711C20.8758 19.4616 20.8758 20.0948 20.4853 20.4853C20.0948 20.8758 19.4616 20.8758 19.0711 20.4853L16.9497 18.364C16.5592 17.9734 16.5592 17.3403 16.9497 16.9497ZM19.0711 3.51472C19.4616 3.90524 19.4616 4.53841 19.0711 4.92893L16.9497 7.05025C16.5592 7.44078 15.9261 7.44078 15.5355 7.05025C15.145 6.65973 15.145 6.02656 15.5355 5.63604L17.6569 3.51472C18.0474 3.1242 18.6805 3.1242 19.0711 3.51472ZM5.63604 16.9497C6.02656 16.5592 6.65973 16.5592 7.05025 16.9497L9.17157 19.0711C9.5621 19.4616 9.5621 20.0948 9.17157 20.4853C8.78105 20.8758 8.14788 20.8758 7.75736 20.4853L5.63604 18.364C5.24551 17.9734 5.24551 17.3403 5.63604 16.9497ZM23 12C23 12.5523 22.5523 13 22 13H19C18.4477 13 18 12.5523 18 12C18 11.4477 18.4477 11 19 11H22C22.5523 11 23 11.4477 23 12ZM6 12C6 12.5523 5.55228 13 5 13H2C1.44772 13 1 12.5523 1 12C1 11.4477 1.44772 11 2 11H5C5.55228 11 6 11.4477 6 12Z"/>';
-            } else {
-                sunIcon.innerHTML = '<path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"/>';
-            }
-        });
 
         // Handle form submission
         window.handleSubmit = async (event) => {
