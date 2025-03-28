@@ -333,8 +333,8 @@
             const { data: { session }, error } = await supabase.auth.getSession();
             
             if (session) {
-                // Already logged in, redirect to chat
-                window.location.href = '/chat.html';
+                // Already logged in, redirect to welcome page
+                window.location.href = '/welcome.html';
                 return;
             }
 
@@ -347,7 +347,7 @@
                     const { data: { user }, error } = await supabase.auth.getUser(accessToken);
                     if (error) throw error;
                     if (user) {
-                        window.location.href = '/chat.html';
+                        window.location.href = '/welcome.html';
                     }
                 } catch (error) {
                     console.error('Error:', error.message);
