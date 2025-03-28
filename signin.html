@@ -308,7 +308,7 @@
                 const { data, error } = await supabase.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
-                        redirectTo: 'https://roumes-hqu7794i1-pablos-projects-f3f598d6.vercel.app/welcome.html',
+                        redirectTo: `${config.redirectUrl}/welcome.html`,
                         queryParams: {
                             access_type: 'offline',
                             prompt: 'consent'
