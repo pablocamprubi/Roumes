@@ -254,6 +254,7 @@
 
     <script type="module">
         import { supabase } from './js/supabase.js';
+        import config from './js/config.js';
 
         // Theme toggle functionality
         const themeToggle = document.querySelector('.theme-toggle');
@@ -273,15 +274,11 @@
             }
         });
 
-        // Form submission handler for email/password
+        // Handle form submission
         window.handleSubmit = async (event) => {
             event.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-
-            // Reset error messages
-            document.getElementById('email-error').style.display = 'none';
-            document.getElementById('password-error').style.display = 'none';
 
             try {
                 const { data, error } = await supabase.auth.signInWithPassword({
@@ -292,104 +289,31 @@
                 if (error) throw error;
             } catch (error) {
                 console.error('Error:', error.message);
-                const errorEl = document.getElementById('email-error');
-                errorEl.textContent = error.message;
-                errorEl.style.display = 'block';
+                document.getElementById('email-error').style.display = 'block';
+                document.getElementById('email-error').textContent = error.message;
             }
         };
 
-        // Google Sign In handler
+        // Handle Google Sign In
         window.handleGoogleSignIn = async () => {
             try {
-                console.log('=== SIGNIN.HTML: Starting Google Sign In ===');
-                console.log('Current URL:', window.location.href);
-                console.log('Starting OAuth flow with Supabase...');
-                
                 const { data, error } = await supabase.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
-                        redirectTo: `${config.redirectUrl}/welcome.html`,
-                        queryParams: {
-                            access_type: 'offline',
-                            prompt: 'consent'
-                        }
+                        redirectTo: `${config.redirectUrl}/welcome.html`
                     }
                 });
 
                 if (error) {
-                    console.error('Google Sign In Error:', error);
                     throw error;
                 }
-
-                console.log('OAuth initialization successful:', data);
-                // Redirect to the OAuth URL
-                if (data?.url) {
-                    console.log('Redirecting to Google OAuth URL:', data.url);
-                    window.location.href = data.url;
-                } else {
-                    console.error('No OAuth URL received from Supabase');
-                }
             } catch (error) {
-                console.error('Error in Google Sign In:', error.message);
-                const errorEl = document.getElementById('email-error');
-                errorEl.textContent = 'Failed to sign in with Google. Please try again.';
-                errorEl.style.display = 'block';
+                console.error('Error:', error.message);
+                const errorMessage = document.getElementById('email-error');
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = 'Failed to sign in with Google. Please try again.';
             }
         };
-
-        // Initialize
-        const init = async () => {
-            console.log('=== SIGNIN.HTML: Initializing ===');
-            console.log('Current URL:', window.location.href);
-            console.log('Checking session...');
-            
-            // Check if we have a session
-            const { data: { session }, error } = await supabase.auth.getSession();
-            console.log('Session check result:', { session, error });
-            
-            if (session) {
-                console.log('Active session found:', session.user.email);
-                console.log('Redirecting to welcome page...');
-                window.location.href = '/welcome.html';
-                return;
-            }
-
-            // Check for OAuth response in URL
-            const params = new URLSearchParams(window.location.hash.substring(1));
-            const accessToken = params.get('access_token');
-            
-            if (accessToken) {
-                console.log('Access token found in URL');
-                console.log('Token length:', accessToken.length);
-                try {
-                    console.log('Attempting to get user with access token...');
-                    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
-                    if (error) {
-                        console.error('Error getting user:', error);
-                        throw error;
-                    }
-                    if (user) {
-                        console.log('User found:', user.email);
-                        console.log('Redirecting to welcome page...');
-                        window.location.href = '/welcome.html';
-                    }
-                } catch (error) {
-                    console.error('Error in access token flow:', error);
-                    const errorEl = document.getElementById('email-error');
-                    errorEl.textContent = 'Failed to complete authentication. Please try again.';
-                    errorEl.style.display = 'block';
-                }
-            } else {
-                console.log('No access token in URL, ready for sign in');
-            }
-        };
-
-        // Listen for auth state changes
-        supabase.auth.onAuthStateChange((event, session) => {
-            console.log('Auth state changed:', event, session ? session.user.email : 'No session');
-        });
-
-        init();
     </script>
 </body>
 </html> 
