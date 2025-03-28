@@ -4,21 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roumes</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7"></script>
     <style>
         :root[data-theme="dark"] {
             --bg-primary: #1a1a1a;
-            --bg-secondary: #252525;
-            --border-color: #333;
             --text-primary: #ffffff;
-            --text-secondary: #888;
+            --accent-color: #6e8efb;
         }
 
         :root[data-theme="light"] {
             --bg-primary: #ffffff;
-            --bg-secondary: #f5f5f5;
-            --border-color: #e0e0e0;
             --text-primary: #1a1a1a;
-            --text-secondary: #666;
+            --accent-color: #4c6ef5;
         }
 
         * {
@@ -40,14 +37,20 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem 2rem;
-            background-color: var(--bg-primary);
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .nav-left {
+        .nav-left, .nav-right {
             display: flex;
             align-items: center;
             gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-primary);
+            text-decoration: none;
         }
 
         .theme-toggle {
@@ -56,9 +59,6 @@
             cursor: pointer;
             padding: 0.5rem;
             color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .theme-toggle svg {
@@ -67,311 +67,84 @@
             fill: currentColor;
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .nav-buttons {
+        .auth-buttons {
             display: flex;
             gap: 1rem;
         }
 
-        .button {
+        .auth-buttons a {
+            text-decoration: none;
             padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
+            border-radius: 0.5rem;
+            font-weight: 500;
         }
 
-        .button.primary {
-            background-color: var(--text-primary);
-            color: var(--bg-primary);
-            border: none;
-        }
-
-        .button.secondary {
-            background-color: transparent;
+        .sign-in {
             color: var(--text-primary);
-            border: 1px solid var(--border-color);
         }
 
-        .main-content {
-            max-width: 800px;
+        .sign-up {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        main {
+            max-width: 1200px;
             margin: 0 auto;
             padding: 4rem 2rem;
             text-align: center;
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #666;
             margin-bottom: 2rem;
         }
 
-        .actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .action-card {
-            background-color: var(--bg-secondary);
-            padding: 1.5rem;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .action-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--text-secondary);
-        }
-
-        .action-source {
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
-        }
-
-        .input-container {
-            margin-top: 2rem;
-            position: relative;
-        }
-
-        input {
-            width: 100%;
-            padding: 1rem;
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-primary);
-            font-size: 1rem;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--text-secondary);
-        }
-
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 1rem;
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            background-color: var(--bg-primary);
-            border-top: 1px solid var(--border-color);
-        }
-
-        .footer a {
-            color: var(--text-primary);
-            text-decoration: none;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 0.5rem;
-        }
-
-        .social-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-        }
-
-        .user-menu {
-            position: relative;
+        .cta-button {
             display: inline-block;
-        }
-
-        .user-button {
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem;
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: var(--bg-secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 500;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 0.5rem;
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-item {
-            padding: 0.5rem 1rem;
-            color: var(--text-primary);
+            padding: 1rem 2rem;
+            background-color: var(--accent-color);
+            color: white;
             text-decoration: none;
-            display: block;
-            border-radius: 4px;
-        }
-
-        .dropdown-item:hover {
-            background-color: var(--bg-primary);
-        }
-
-        .auth-buttons {
-            display: none;
-        }
-
-        .auth-buttons.show {
-            display: flex;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            font-size: 1.1rem;
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7"></script>
 </head>
 <body>
     <nav>
         <div class="nav-left">
-            <div class="logo">Roumes</div>
+            <a href="/" class="logo">Roumes</a>
             <button class="theme-toggle" aria-label="Toggle theme">
                 <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"/>
                 </svg>
             </button>
         </div>
-        <div class="auth-buttons show">
-            <a href="signin.html" class="button secondary">Sign In</a>
-            <button class="button primary">Sign Up</button>
-        </div>
-        <div class="user-menu" style="display: none;">
-            <button class="user-button">
-                <span class="user-avatar">U</span>
-                <span class="user-name">User</span>
-            </button>
-            <div class="dropdown-menu">
-                <a href="#" class="dropdown-item" id="profile-link">Profile</a>
-                <a href="#" class="dropdown-item" id="settings-link">Settings</a>
-                <hr style="border: none; border-top: 1px solid var(--border-color); margin: 0.5rem 0;">
-                <a href="#" class="dropdown-item" onclick="handleSignOut()">Sign Out</a>
+        <div class="nav-right">
+            <div class="auth-buttons">
+                <a href="/signin.html" class="sign-in">Sign In</a>
+                <a href="/signin.html" class="sign-up">Sign Up</a>
             </div>
         </div>
     </nav>
 
-    <div class="main-content">
-        <h1>What can I do for you?</h1>
-        
-        <div class="actions">
-            <div class="action-card">
-                <div>Fetch meetings for this week</div>
-                <div class="action-source">from Google Calendar</div>
-            </div>
-            <div class="action-card">
-                <div>Create a closed won deal</div>
-                <div class="action-source">in HubSpot</div>
-            </div>
-        </div>
-
-        <div class="input-container">
-            <input type="text" placeholder="Ask Roumes to take action..." />
-        </div>
-    </div>
-
-    <footer class="footer">
-        <div>
-            Grant access to your apps by connecting your accounts <a href="#">here</a>
-        </div>
-        <div class="social-links">
-            <a href="#">Terms</a>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Built using ai-chatbot and scalar</a>
-        </div>
-    </footer>
+    <main>
+        <h1>Welcome to Roumes</h1>
+        <p>Your AI-powered assistant for seamless task management.</p>
+        <a href="/signin.html" class="cta-button">Get Started</a>
+    </main>
 
     <script type="module">
         import { supabase } from './js/supabase.js';
-
-        const init = async () => {
-            console.log('=== INDEX.HTML: Starting authentication check ===');
-            console.log('Current URL:', window.location.href);
-            console.log('URL hash:', window.location.hash);
-            
-            // Check if we have an access token in the URL
-            const params = new URLSearchParams(window.location.hash.substring(1));
-            const accessToken = params.get('access_token');
-            
-            if (accessToken) {
-                console.log('ACCESS TOKEN FOUND in URL');
-                console.log('Token length:', accessToken.length);
-                try {
-                    console.log('Attempting to get user with access token...');
-                    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
-                    if (error) {
-                        console.error('Error getting user:', error);
-                        throw error;
-                    }
-                    if (user) {
-                        console.log('User found:', user.email);
-                        console.log('Redirecting to welcome page...');
-                        window.location.href = '/welcome.html';
-                        return;
-                    } else {
-                        console.log('No user found with access token');
-                    }
-                } catch (error) {
-                    console.error('Error in access token flow:', error);
-                    window.location.href = '/signin.html';
-                    return;
-                }
-            } else {
-                console.log('No access token found in URL');
-            }
-
-            // Check if we have an existing session
-            console.log('Checking for existing session...');
-            const { data: { session }, error } = await supabase.auth.getSession();
-            console.log('Session check result:', { session, error });
-            
-            if (session) {
-                console.log('Active session found:', session.user.email);
-                console.log('Redirecting to welcome page...');
-                window.location.href = '/welcome.html';
-                return;
-            }
-
-            // No session, redirect to sign in
-            console.log('No active session found, redirecting to sign in...');
-            window.location.href = '/signin.html';
-        };
-
-        // Listen for auth state changes
-        supabase.auth.onAuthStateChange((event, session) => {
-            console.log('Auth state changed:', event, session ? session.user.email : 'No session');
-        });
-
-        init();
+        import config from './js/config.js';
 
         // Theme toggle functionality
         const themeToggle = document.querySelector('.theme-toggle');
@@ -391,71 +164,15 @@
             }
         });
 
-        // User menu functionality
-        const userButton = document.querySelector('.user-button');
-        const dropdownMenu = document.querySelector('.dropdown-menu');
-        const userMenu = document.querySelector('.user-menu');
-        const authButtons = document.querySelector('.auth-buttons');
-
-        userButton?.addEventListener('click', () => {
-            dropdownMenu.classList.toggle('show');
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (event) => {
-            if (!userButton?.contains(event.target)) {
-                dropdownMenu.classList.remove('show');
-            }
-        });
-
-        // Sign out handler
-        window.handleSignOut = async () => {
-            try {
-                const { error } = await supabase.auth.signOut();
-                if (error) throw error;
-                // Redirect will be handled by onAuthStateChange in supabase.js
-            } catch (error) {
-                console.error('Error signing out:', error.message);
+        // Check if user is already authenticated
+        const checkAuth = async () => {
+            const { data: { session }, error } = await supabase.auth.getSession();
+            if (session) {
+                window.location.href = '/welcome.html';
             }
         };
 
-        // Update UI based on auth state
-        const updateUI = (user) => {
-            if (user) {
-                userMenu.style.display = 'block';
-                authButtons.classList.remove('show');
-                
-                // Update user info
-                const userAvatar = document.querySelector('.user-avatar');
-                const userName = document.querySelector('.user-name');
-                
-                // Set user initial or image
-                if (user.user_metadata?.avatar_url) {
-                    userAvatar.innerHTML = `<img src="${user.user_metadata.avatar_url}" alt="User avatar" style="width: 100%; height: 100%; border-radius: 50%;">`;
-                } else {
-                    userAvatar.textContent = (user.email || 'U')[0].toUpperCase();
-                }
-                
-                // Set user name or email
-                userName.textContent = user.user_metadata?.full_name || user.email;
-            } else {
-                userMenu.style.display = 'none';
-                authButtons.classList.add('show');
-            }
-        };
-
-        // Check initial auth state
-        const checkUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            updateUI(user);
-        };
-
-        // Listen for auth state changes
-        supabase.auth.onAuthStateChange((event, session) => {
-            updateUI(session?.user);
-        });
-
-        checkUser();
+        checkAuth();
     </script>
 </body>
 </html> 
