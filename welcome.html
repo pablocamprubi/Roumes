@@ -162,6 +162,29 @@
             flex-direction: column;
             height: 100vh;
             position: relative;
+            margin-left: 0;
+            transition: margin-left 0.3s ease;
+        }
+
+        .sidebar:not(.collapsed) + .main-content {
+            margin-left: 260px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                height: 100vh;
+                left: 0;
+                top: 0;
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+            }
+
+            .toggle-sidebar {
+                left: 1rem !important;
+            }
         }
 
         .header {
@@ -275,6 +298,7 @@
             margin-top: auto;
             padding-top: 1rem;
             border-top: 1px solid var(--button-secondary-border);
+            position: relative;
         }
 
         .user-info {
@@ -290,6 +314,44 @@
         }
 
         .user-info:hover {
+            background-color: var(--button-secondary-hover-bg);
+            color: var(--text-primary);
+        }
+
+        .user-popup {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            margin: 0.5rem;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--button-secondary-border);
+            border-radius: 6px;
+            padding: 0.5rem;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-popup.visible {
+            display: block;
+        }
+
+        .logout-button {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding: 0.5rem;
+            background: none;
+            border: none;
+            border-radius: 4px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .logout-button:hover {
             background-color: var(--button-secondary-hover-bg);
             color: var(--text-primary);
         }
@@ -353,6 +415,16 @@
                     </svg>
                     <span>Loading...</span>
                 </div>
+                <div class="user-popup">
+                    <button class="logout-button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                            <polyline points="16 17 21 12 16 7"/>
+                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                        Sign out
+                    </button>
+                </div>
             </div>
         </div>
     </aside>
@@ -415,6 +487,31 @@
             localStorage.setItem('sidebarState', isCollapsed ? 'collapsed' : 'expanded');
         });
 
+        // Handle user popup
+        const userInfo = document.querySelector('#user-email');
+        const userPopup = document.querySelector('.user-popup');
+        const logoutButton = document.querySelector('.logout-button');
+
+        userInfo.addEventListener('click', (e) => {
+            e.stopPropagation();
+            userPopup.classList.toggle('visible');
+        });
+
+        // Close popup when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!userInfo.contains(e.target) && !userPopup.contains(e.target)) {
+                userPopup.classList.remove('visible');
+            }
+        });
+
+        // Handle logout
+        logoutButton.addEventListener('click', async () => {
+            const { error } = await supabase.auth.signOut();
+            if (!error) {
+                window.location.href = '/';
+            }
+        });
+
         // Auto-resize textarea
         const textarea = document.querySelector('.chat-input');
         textarea.addEventListener('input', function() {
@@ -430,14 +527,6 @@
             }
         }
         getUserEmail();
-
-        // Handle logout
-        document.querySelector('#user-email').addEventListener('click', async () => {
-            const { error } = await supabase.auth.signOut();
-            if (!error) {
-                window.location.href = '/';
-            }
-        });
 
         // Prevent form submission on enter (allow shift+enter for new lines)
         textarea.addEventListener('keydown', (e) => {
