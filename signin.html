@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In - Maton</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7"></script>
     <style>
         :root[data-theme="dark"] {
             --bg-primary: #1a1a1a;
@@ -305,12 +306,12 @@
                 const { data, error } = await supabase.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
-                        redirectTo: window.location.origin
+                        redirectTo: `${window.location.origin}/index.html`
                     }
                 });
 
                 if (error) throw error;
-                // Redirect will be handled automatically by Supabase
+                // The redirect will be handled automatically by Supabase
             } catch (error) {
                 console.error('Error:', error.message);
                 const errorEl = document.getElementById('email-error');
