@@ -117,34 +117,10 @@
             overflow-y: auto;
         }
 
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .action-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--button-secondary-border);
-            border-radius: 8px;
-            padding: 1rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .action-card:hover {
-            background-color: var(--card-hover);
-        }
-
-        .action-title {
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-        }
-
-        .action-subtitle {
-            font-size: 0.9rem;
+        .empty-state {
+            text-align: center;
             color: var(--text-secondary);
+            margin-top: 2rem;
         }
 
         .chat-input-container {
@@ -191,12 +167,6 @@
 
         .send-button:hover {
             color: var(--text-primary);
-        }
-
-        .empty-state {
-            text-align: center;
-            color: var(--text-secondary);
-            margin-top: 2rem;
         }
 
         .user-section {
@@ -282,25 +252,6 @@
         <button class="feedback-button">Feedback</button>
         
         <div class="chat-container">
-            <div class="quick-actions">
-                <div class="action-card">
-                    <div class="action-title">Fetch meetings for this week</div>
-                    <div class="action-subtitle">from Google Calendar</div>
-                </div>
-                <div class="action-card">
-                    <div class="action-title">Create a closed won deal</div>
-                    <div class="action-subtitle">in HubSpot</div>
-                </div>
-                <div class="action-card">
-                    <div class="action-title">Send follow-up emails</div>
-                    <div class="action-subtitle">to pending leads</div>
-                </div>
-                <div class="action-card">
-                    <div class="action-title">Update Salesforce records</div>
-                    <div class="action-subtitle">bulk update opportunities</div>
-                </div>
-            </div>
-
             <div class="empty-state">
                 Your conversations will appear here once you start chatting!
             </div>
