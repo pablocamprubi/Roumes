@@ -290,8 +290,6 @@
                 });
 
                 if (error) throw error;
-
-                // Redirect will be handled by onAuthStateChange in supabase.js
             } catch (error) {
                 console.error('Error:', error.message);
                 const errorEl = document.getElementById('email-error');
@@ -303,20 +301,21 @@
         // Google Sign In handler
         window.handleGoogleSignIn = async () => {
             try {
-                const { error } = await supabase.auth.signInWithOAuth({
+                console.log('Starting Google Sign In...');
+                const { data, error } = await supabase.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
-                        queryParams: {
-                            access_type: 'offline',
-                            prompt: 'consent'
-                        },
-                        redirectTo: `${window.location.origin}/chat.html`
+                        redirectTo: `${window.location.origin}/chat.html`,
+                        skipBrowserRedirect: false
                     }
                 });
 
                 if (error) {
+                    console.error('Google Sign In Error:', error);
                     throw error;
                 }
+
+                console.log('Google Sign In Success:', data);
             } catch (error) {
                 console.error('Error:', error.message);
                 const errorEl = document.getElementById('email-error');
@@ -325,34 +324,38 @@
             }
         };
 
-        // Check if user is already signed in
-        const checkUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-                window.location.href = '/index.html';
+        // Initialize
+        const init = async () => {
+            // Check if we have a session
+            const { data: { session }, error } = await supabase.auth.getSession();
+            
+            if (session) {
+                // Already logged in, redirect to chat
+                window.location.href = '/chat.html';
+                return;
             }
-        };
 
-        // Check for OAuth response
-        const checkOAuthResponse = async () => {
+            // Check for OAuth response in URL
             const params = new URLSearchParams(window.location.hash.substring(1));
             const accessToken = params.get('access_token');
             
             if (accessToken) {
                 try {
-                    const { data, error } = await supabase.auth.getUser(accessToken);
+                    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
                     if (error) throw error;
-                    if (data.user) {
-                        window.location.href = '/index.html';
+                    if (user) {
+                        window.location.href = '/chat.html';
                     }
                 } catch (error) {
                     console.error('Error:', error.message);
+                    const errorEl = document.getElementById('email-error');
+                    errorEl.textContent = 'Failed to complete authentication. Please try again.';
+                    errorEl.style.display = 'block';
                 }
             }
         };
 
-        checkUser();
-        checkOAuthResponse();
+        init();
     </script>
 </body>
 </html> 
