@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - Roumes</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7"></script>
+    <style>
+        :root[data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --text-primary: #ffffff;
+            --accent-color: #6e8efb;
+        }
+
+        :root[data-theme="light"] {
+            --bg-primary: #ffffff;
+            --text-primary: #1a1a1a;
+            --accent-color: #4c6ef5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .welcome-message {
+            font-size: 2.5rem;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .email {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-message">
+        Hello <span class="email" id="user-email"></span>
+    </div>
+
+    <script type="module">
+        import { supabase } from './js/supabase.js';
+
+        // Check authentication status
+        const checkUser = async () => {
+            const { data: { user }, error } = await supabase.auth.getUser();
+            if (error || !user) {
+                window.location.href = '/signin.html';
+                return;
+            }
+            
+            // Display the user's email
+            document.getElementById('user-email').textContent = user.email;
+        };
+
+        // Initialize
+        checkUser();
+    </script>
+</body>
+</html> 

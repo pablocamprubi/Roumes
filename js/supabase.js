@@ -9,8 +9,8 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 supabase.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN') {
         console.log('User signed in:', session.user)
-        // Redirect to chat page
-        window.location.href = '/chat.html'
+        // Redirect to welcome page
+        window.location.href = '/welcome.html'
     } else if (event === 'SIGNED_OUT') {
         console.log('User signed out')
         // Redirect to sign in page
