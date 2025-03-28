@@ -303,15 +303,20 @@
         // Google Sign In handler
         window.handleGoogleSignIn = async () => {
             try {
-                const { data, error } = await supabase.auth.signInWithOAuth({
+                const { error } = await supabase.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
+                        queryParams: {
+                            access_type: 'offline',
+                            prompt: 'consent'
+                        },
                         redirectTo: `${window.location.origin}/index.html`
                     }
                 });
 
-                if (error) throw error;
-                // The redirect will be handled automatically by Supabase
+                if (error) {
+                    throw error;
+                }
             } catch (error) {
                 console.error('Error:', error.message);
                 const errorEl = document.getElementById('email-error');
@@ -328,7 +333,26 @@
             }
         };
 
+        // Check for OAuth response
+        const checkOAuthResponse = async () => {
+            const params = new URLSearchParams(window.location.hash.substring(1));
+            const accessToken = params.get('access_token');
+            
+            if (accessToken) {
+                try {
+                    const { data, error } = await supabase.auth.getUser(accessToken);
+                    if (error) throw error;
+                    if (data.user) {
+                        window.location.href = '/index.html';
+                    }
+                } catch (error) {
+                    console.error('Error:', error.message);
+                }
+            }
+        };
+
         checkUser();
+        checkOAuthResponse();
     </script>
 </body>
 </html> 
