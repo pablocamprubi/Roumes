@@ -1,44 +1,255 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
+    <title>Maton-style Interface</title>
     <style>
-        body {
+        :root[data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #252525;
+            --border-color: #333;
+            --text-primary: #ffffff;
+            --text-secondary: #888;
+        }
+
+        :root[data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --border-color: #e0e0e0;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666;
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #6e8efb, #a777e3);
-            color: white;
         }
-        .container {
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .button {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .button.primary {
+            background-color: var(--text-primary);
+            color: var(--bg-primary);
+            border: none;
+        }
+
+        .button.secondary {
+            background-color: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .main-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
             text-align: center;
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
         }
+
         h1 {
-            font-size: 3.5rem;
-            margin: 0;
-            margin-bottom: 1rem;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
         }
-        p {
-            font-size: 1.2rem;
-            opacity: 0.9;
+
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .action-card {
+            background-color: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--text-secondary);
+        }
+
+        .action-source {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .input-container {
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--text-secondary);
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            background-color: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer a {
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        .social-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Hello World!</h1>
-        <p>Welcome to my first Vercel deployment</p>
+    <nav>
+        <div class="nav-left">
+            <div class="logo">Maton</div>
+            <button class="theme-toggle" aria-label="Toggle theme">
+                <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"/>
+                </svg>
+            </button>
+        </div>
+        <div class="nav-buttons">
+            <button class="button secondary">Sign In</button>
+            <button class="button primary">Sign Up</button>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <h1>What can I do for you?</h1>
+        
+        <div class="actions">
+            <div class="action-card">
+                <div>Fetch meetings for this week</div>
+                <div class="action-source">from Google Calendar</div>
+            </div>
+            <div class="action-card">
+                <div>Create a closed won deal</div>
+                <div class="action-source">in HubSpot</div>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <input type="text" placeholder="Ask Maton to take action..." />
+        </div>
     </div>
+
+    <footer class="footer">
+        <div>
+            Grant access to your apps by connecting your accounts <a href="#">here</a>
+        </div>
+        <div class="social-links">
+            <a href="#">Terms</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Built using ai-chatbot and scalar</a>
+        </div>
+    </footer>
+
+    <script>
+        const themeToggle = document.querySelector('.theme-toggle');
+        const html = document.documentElement;
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            
+            // Update the icon
+            const sunIcon = themeToggle.querySelector('svg');
+            if (newTheme === 'light') {
+                sunIcon.innerHTML = '<path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 0C12.5523 0 13 0.447715 13 1V4C13 4.55228 12.5523 5 12 5C11.4477 5 11 4.55228 11 4V1C11 0.447715 11.4477 0 12 0ZM12 19C12.5523 19 13 19.4477 13 20V23C13 23.5523 12.5523 24 12 24C11.4477 24 11 23.5523 11 23V20C11 19.4477 11.4477 19 12 19ZM3.51472 3.51472C3.90524 3.1242 4.53841 3.1242 4.92893 3.51472L7.05025 5.63604C7.44078 6.02656 7.44078 6.65973 7.05025 7.05025C6.65973 7.44078 6.02656 7.44078 5.63604 7.05025L3.51472 4.92893C3.1242 4.53841 3.1242 3.90524 3.51472 3.51472ZM16.9497 16.9497C17.3403 16.5592 17.9734 16.5592 18.364 16.9497L20.4853 19.0711C20.8758 19.4616 20.8758 20.0948 20.4853 20.4853C20.0948 20.8758 19.4616 20.8758 19.0711 20.4853L16.9497 18.364C16.5592 17.9734 16.5592 17.3403 16.9497 16.9497ZM19.0711 3.51472C19.4616 3.90524 19.4616 4.53841 19.0711 4.92893L16.9497 7.05025C16.5592 7.44078 15.9261 7.44078 15.5355 7.05025C15.145 6.65973 15.145 6.02656 15.5355 5.63604L17.6569 3.51472C18.0474 3.1242 18.6805 3.1242 19.0711 3.51472ZM5.63604 16.9497C6.02656 16.5592 6.65973 16.5592 7.05025 16.9497L9.17157 19.0711C9.5621 19.4616 9.5621 20.0948 9.17157 20.4853C8.78105 20.8758 8.14788 20.8758 7.75736 20.4853L5.63604 18.364C5.24551 17.9734 5.24551 17.3403 5.63604 16.9497ZM23 12C23 12.5523 22.5523 13 22 13H19C18.4477 13 18 12.5523 18 12C18 11.4477 18.4477 11 19 11H22C22.5523 11 23 11.4477 23 12ZM6 12C6 12.5523 5.55228 13 5 13H2C1.44772 13 1 12.5523 1 12C1 11.4477 1.44772 11 2 11H5C5.55228 11 6 11.4477 6 12Z"/>';
+            } else {
+                sunIcon.innerHTML = '<path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"/>';
+            }
+        });
+    </script>
 </body>
 </html> 
