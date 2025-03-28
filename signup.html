@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Roumes</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7"></script>
+    <style>
+        :root[data-theme="dark"] {
+            --bg-primary: #000000;
+            --bg-secondary: #ffffff;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --button-bg: #ffffff;
+            --button-text: #000000;
+            --button-hover-bg: #f3f3f3;
+            --button-secondary-bg: transparent;
+            --button-secondary-border: #333333;
+            --button-secondary-hover-bg: #111111;
+            --input-bg: #111111;
+            --input-border: #333333;
+            --input-focus-border: #555555;
+            --error-color: #ff4444;
+        }
+
+        :root[data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #000000;
+            --text-primary: #000000;
+            --text-secondary: #666666;
+            --button-bg: #000000;
+            --button-text: #ffffff;
+            --button-hover-bg: #333333;
+            --button-secondary-bg: transparent;
+            --button-secondary-border: #eaeaea;
+            --button-secondary-hover-bg: #f5f5f5;
+            --input-bg: #f5f5f5;
+            --input-border: #eaeaea;
+            --input-focus-border: #999999;
+            --error-color: #dc2626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .signup-container {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            background-color: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--input-focus-border);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .button {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 1rem;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .button.primary {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+        }
+
+        .button.primary:hover {
+            background-color: var(--button-hover-bg);
+        }
+
+        .button.secondary {
+            background-color: var(--button-secondary-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--button-secondary-border);
+        }
+
+        .button.secondary:hover {
+            background-color: var(--button-secondary-hover-bg);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 1.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--button-secondary-border);
+        }
+
+        .divider::before {
+            margin-right: 1rem;
+        }
+
+        .divider::after {
+            margin-left: 1rem;
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 1.5rem;
+        }
+
+        .footer-text a {
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <a href="/" class="logo">Roumes</a>
+        <h1>Create your account</h1>
+        
+        <form id="signup-form">
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" id="email" name="email" required>
+                <div class="error-message" id="email-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <div class="error-message" id="password-error"></div>
+            </div>
+
+            <button type="submit" class="button primary">Create account</button>
+        </form>
+
+        <div class="divider">or</div>
+
+        <button id="google-signup" class="button secondary">
+            Continue with Google
+        </button>
+
+        <p class="footer-text">
+            Already have an account? <a href="/signin.html">Sign in</a>
+        </p>
+    </div>
+
+    <script type="module">
+        import { supabase } from './js/supabase.js';
+        import config from './js/config.js';
+
+        const signupForm = document.getElementById('signup-form');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const emailError = document.getElementById('email-error');
+        const passwordError = document.getElementById('password-error');
+
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Reset error messages
+            emailError.style.display = 'none';
+            passwordError.style.display = 'none';
+
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            try {
+                const { data, error } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        emailRedirectTo: `${config.siteUrl}/welcome.html`
+                    }
+                });
+
+                if (error) throw error;
+
+                // Redirect to welcome page or show confirmation message
+                window.location.href = '/welcome.html';
+            } catch (error) {
+                console.error('Error:', error.message);
+                
+                if (error.message.toLowerCase().includes('email')) {
+                    emailError.textContent = error.message;
+                    emailError.style.display = 'block';
+                } else if (error.message.toLowerCase().includes('password')) {
+                    passwordError.textContent = error.message;
+                    passwordError.style.display = 'block';
+                }
+            }
+        });
+
+        // Google Sign Up
+        document.getElementById('google-signup').addEventListener('click', async () => {
+            try {
+                const { data, error } = await supabase.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        redirectTo: `${config.siteUrl}/welcome.html`
+                    }
+                });
+
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error:', error.message);
+            }
+        });
+    </script>
+</body>
+</html> 
