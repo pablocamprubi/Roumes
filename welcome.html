@@ -7,15 +7,21 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7"></script>
     <style>
         :root[data-theme="dark"] {
-            --bg-primary: #1a1a1a;
+            --bg-primary: #000000;
             --text-primary: #ffffff;
-            --accent-color: #6e8efb;
+            --text-secondary: #888888;
+            --button-bg: #ffffff;
+            --button-text: #000000;
+            --button-hover-bg: #f3f3f3;
         }
 
         :root[data-theme="light"] {
             --bg-primary: #ffffff;
-            --text-primary: #1a1a1a;
-            --accent-color: #4c6ef5;
+            --text-primary: #000000;
+            --text-secondary: #666666;
+            --button-bg: #000000;
+            --button-text: #ffffff;
+            --button-hover-bg: #333333;
         }
 
         * {
@@ -33,42 +39,51 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: all 0.2s ease;
+            line-height: 1.6;
         }
 
         .welcome-message {
-            font-size: 2.5rem;
+            font-size: 2rem;
             text-align: center;
             padding: 2rem;
+            font-weight: 400;
+            letter-spacing: -0.02em;
         }
 
         .email {
-            color: var(--accent-color);
-            font-weight: bold;
+            color: var(--text-secondary);
+            font-weight: 500;
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 1.75rem;
         }
 
         .logout-button {
             margin-top: 2rem;
             padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            background-color: var(--accent-color);
-            color: white;
+            font-size: 0.875rem;
+            background-color: var(--button-bg);
+            color: var(--button-text);
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            transition: filter 0.3s ease;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            letter-spacing: -0.01em;
         }
 
         .logout-button:hover {
-            filter: brightness(1.1);
+            background-color: var(--button-hover-bg);
         }
     </style>
 </head>
 <body>
     <div class="welcome-message">
-        Hello <span class="email" id="user-email"></span>
+        Welcome back
+        <span class="email" id="user-email"></span>
     </div>
-    <button class="logout-button" onclick="handleLogout()">Sign Out</button>
+    <button class="logout-button" onclick="handleLogout()">Sign out</button>
 
     <script type="module">
         import { supabase } from './js/supabase.js';
