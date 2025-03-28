@@ -3,25 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome - Roumes</title>
+    <title>Roumes - Your AI Assistant</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7"></script>
     <style>
         :root[data-theme="dark"] {
             --bg-primary: #000000;
+            --bg-secondary: #111111;
             --text-primary: #ffffff;
             --text-secondary: #888888;
             --button-bg: #ffffff;
             --button-text: #000000;
             --button-hover-bg: #f3f3f3;
+            --button-secondary-bg: transparent;
+            --button-secondary-border: #333333;
+            --button-secondary-hover-bg: #111111;
+            --sidebar-bg: #111111;
+            --card-bg: #1a1a1a;
+            --card-hover: #222222;
         }
 
         :root[data-theme="light"] {
             --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
             --text-primary: #000000;
             --text-secondary: #666666;
             --button-bg: #000000;
             --button-text: #ffffff;
             --button-hover-bg: #333333;
+            --button-secondary-bg: transparent;
+            --button-secondary-border: #eaeaea;
+            --button-secondary-hover-bg: #f5f5f5;
+            --sidebar-bg: #f5f5f5;
+            --card-bg: #ffffff;
+            --card-hover: #f9f9f9;
         }
 
         * {
@@ -34,95 +48,311 @@
         body {
             background-color: var(--bg-primary);
             color: var(--text-primary);
-            min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.2s ease;
-            line-height: 1.6;
+            min-height: 100vh;
         }
 
-        .welcome-message {
-            font-size: 2rem;
-            text-align: center;
-            padding: 2rem;
-            font-weight: 400;
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--button-secondary-border);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
             letter-spacing: -0.02em;
         }
 
-        .email {
-            color: var(--text-secondary);
-            font-weight: 500;
-            display: block;
-            margin-top: 0.5rem;
-            font-size: 1.75rem;
+        .nav-section {
+            margin-bottom: 2rem;
         }
 
-        .logout-button {
-            margin-top: 2rem;
-            padding: 0.75rem 1.5rem;
-            font-size: 0.875rem;
-            background-color: var(--button-bg);
-            color: var(--button-text);
-            border: none;
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
             border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background-color: var(--card-hover);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            color: var(--text-primary);
+            background-color: var(--card-bg);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--button-secondary-border);
+            border-radius: 8px;
+            padding: 1rem;
             cursor: pointer;
             transition: all 0.2s ease;
-            font-weight: 500;
-            letter-spacing: -0.01em;
         }
 
-        .logout-button:hover {
-            background-color: var(--button-hover-bg);
+        .action-card:hover {
+            background-color: var(--card-hover);
+        }
+
+        .action-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .action-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .chat-input-container {
+            padding: 1rem 2rem;
+            border-top: 1px solid var(--button-secondary-border);
+        }
+
+        .chat-input-wrapper {
+            position: relative;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 1rem;
+            padding-right: 3rem;
+            background-color: var(--card-bg);
+            border: 1px solid var(--button-secondary-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            resize: none;
+            min-height: 60px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--text-secondary);
+        }
+
+        .send-button {
+            position: absolute;
+            right: 1rem;
+            bottom: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .send-button:hover {
+            color: var(--text-primary);
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 2rem;
+        }
+
+        .user-section {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--button-secondary-border);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .feedback-button {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            background: none;
+            border: 1px solid var(--button-secondary-border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .feedback-button:hover {
+            background-color: var(--card-hover);
+            color: var(--text-primary);
         }
     </style>
 </head>
 <body>
-    <div class="welcome-message">
-        Welcome back
-        <span class="email" id="user-email"></span>
-    </div>
-    <button class="logout-button" onclick="handleLogout()">Sign out</button>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="/" class="logo">Roumes</a>
+            <button id="new-chat" style="background: none; border: none; color: var(--text-primary); cursor: pointer;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+            </button>
+        </div>
+
+        <nav class="nav-section">
+            <a href="#" class="nav-item active">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+                Home
+            </a>
+            <a href="#" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                </svg>
+                Integrations
+            </a>
+            <a href="#" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                </svg>
+                Settings
+            </a>
+        </nav>
+
+        <div class="user-section">
+            <div class="user-info" id="user-email">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>Loading...</span>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <button class="feedback-button">Feedback</button>
+        
+        <div class="chat-container">
+            <div class="quick-actions">
+                <div class="action-card">
+                    <div class="action-title">Fetch meetings for this week</div>
+                    <div class="action-subtitle">from Google Calendar</div>
+                </div>
+                <div class="action-card">
+                    <div class="action-title">Create a closed won deal</div>
+                    <div class="action-subtitle">in HubSpot</div>
+                </div>
+                <div class="action-card">
+                    <div class="action-title">Send follow-up emails</div>
+                    <div class="action-subtitle">to pending leads</div>
+                </div>
+                <div class="action-card">
+                    <div class="action-title">Update Salesforce records</div>
+                    <div class="action-subtitle">bulk update opportunities</div>
+                </div>
+            </div>
+
+            <div class="empty-state">
+                Your conversations will appear here once you start chatting!
+            </div>
+        </div>
+
+        <div class="chat-input-container">
+            <div class="chat-input-wrapper">
+                <textarea class="chat-input" placeholder="Ask Roumes to take action..." rows="1"></textarea>
+                <button class="send-button">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </main>
 
     <script type="module">
         import { supabase } from './js/supabase.js';
 
-        // Check authentication status
-        const checkUser = async () => {
-            console.log('Checking user status...');
-            const { data: { user }, error } = await supabase.auth.getUser();
-            
-            if (error) {
-                console.error('Auth error:', error);
-                window.location.href = '/signin.html';
-                return;
+        // Auto-resize textarea
+        const textarea = document.querySelector('.chat-input');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // Get and display user email
+        async function getUserEmail() {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                document.querySelector('#user-email span').textContent = user.email;
             }
-            
-            if (!user) {
-                console.log('No user found, redirecting to signin');
-                window.location.href = '/signin.html';
-                return;
-            }
-            
-            console.log('User authenticated:', user);
-            // Display the user's email
-            document.getElementById('user-email').textContent = user.email;
-        };
+        }
+        getUserEmail();
 
         // Handle logout
-        window.handleLogout = async () => {
-            try {
-                const { error } = await supabase.auth.signOut();
-                if (error) throw error;
+        document.querySelector('#user-email').addEventListener('click', async () => {
+            const { error } = await supabase.auth.signOut();
+            if (!error) {
                 window.location.href = '/';
-            } catch (error) {
-                console.error('Error signing out:', error.message);
             }
-        };
+        });
 
-        // Initialize
-        checkUser();
+        // Prevent form submission on enter (allow shift+enter for new lines)
+        textarea.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                // TODO: Handle message sending
+            }
+        });
     </script>
 </body>
 </html> 
