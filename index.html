@@ -250,6 +250,7 @@
             display: flex;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7"></script>
 </head>
 <body>
     <nav>
@@ -311,6 +312,45 @@
 
     <script type="module">
         import { supabase } from './js/supabase.js';
+
+        const init = async () => {
+            console.log('Checking authentication...');
+            
+            // Check if we have an access token in the URL
+            const params = new URLSearchParams(window.location.hash.substring(1));
+            const accessToken = params.get('access_token');
+            
+            if (accessToken) {
+                console.log('Access token found, getting user...');
+                try {
+                    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+                    if (error) throw error;
+                    if (user) {
+                        console.log('User found, redirecting to welcome page...');
+                        window.location.href = '/welcome.html';
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    window.location.href = '/signin.html';
+                    return;
+                }
+            }
+
+            // Check if we have an existing session
+            const { data: { session }, error } = await supabase.auth.getSession();
+            if (session) {
+                console.log('Session found, redirecting to welcome page...');
+                window.location.href = '/welcome.html';
+                return;
+            }
+
+            // No session, redirect to sign in
+            console.log('No session found, redirecting to sign in...');
+            window.location.href = '/signin.html';
+        };
+
+        init();
 
         // Theme toggle functionality
         const themeToggle = document.querySelector('.theme-toggle');
