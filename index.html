@@ -3,19 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roumes</title>
+    <title>Roumes - Your Digital Workspace</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7"></script>
     <style>
         :root[data-theme="dark"] {
-            --bg-primary: #1a1a1a;
+            --bg-primary: #000000;
+            --bg-secondary: #ffffff;
             --text-primary: #ffffff;
-            --accent-color: #6e8efb;
+            --text-secondary: #888888;
+            --button-bg: #ffffff;
+            --button-text: #000000;
+            --button-hover-bg: #f3f3f3;
+            --button-secondary-bg: transparent;
+            --button-secondary-border: #333333;
+            --button-secondary-hover-bg: #111111;
         }
 
         :root[data-theme="light"] {
             --bg-primary: #ffffff;
-            --text-primary: #1a1a1a;
-            --accent-color: #4c6ef5;
+            --bg-secondary: #000000;
+            --text-primary: #000000;
+            --text-secondary: #666666;
+            --button-bg: #000000;
+            --button-text: #ffffff;
+            --button-hover-bg: #333333;
+            --button-secondary-bg: transparent;
+            --button-secondary-border: #eaeaea;
+            --button-secondary-hover-bg: #f5f5f5;
         }
 
         * {
@@ -29,92 +43,121 @@
             background-color: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s ease;
+            line-height: 1.6;
         }
 
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--button-secondary-border);
         }
 
-        .nav-left, .nav-right {
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-right {
             display: flex;
             align-items: center;
             gap: 1rem;
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--text-primary);
+        .button {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
             text-decoration: none;
         }
 
-        .theme-toggle {
-            background: none;
+        .button.primary {
+            background-color: var(--button-bg);
+            color: var(--button-text);
             border: none;
-            cursor: pointer;
-            padding: 0.5rem;
+        }
+
+        .button.primary:hover {
+            background-color: var(--button-hover-bg);
+        }
+
+        .button.secondary {
+            background-color: var(--button-secondary-bg);
             color: var(--text-primary);
+            border: 1px solid var(--button-secondary-border);
         }
 
-        .theme-toggle svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
+        .button.secondary:hover {
+            background-color: var(--button-secondary-hover-bg);
         }
 
-        .auth-buttons {
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+        }
+
+        .hero-buttons {
             display: flex;
             gap: 1rem;
         }
 
-        .auth-buttons a {
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-        }
-
-        .sign-in {
-            color: var(--text-primary);
-        }
-
-        .sign-up {
-            background-color: var(--accent-color);
-            color: white;
-        }
-
-        main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-        }
-
-        p {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 2rem;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background-color: var(--accent-color);
-            color: white;
-            text-decoration: none;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            font-size: 1.1rem;
+        .hero-buttons .button {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
         }
     </style>
 </head>
@@ -122,57 +165,29 @@
     <nav>
         <div class="nav-left">
             <a href="/" class="logo">Roumes</a>
-            <button class="theme-toggle" aria-label="Toggle theme">
-                <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"/>
-                </svg>
-            </button>
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#about" class="nav-link">About</a>
+            </div>
         </div>
         <div class="nav-right">
-            <div class="auth-buttons">
-                <a href="/signin.html" class="sign-in">Sign In</a>
-                <a href="/signin.html" class="sign-up">Sign Up</a>
-            </div>
+            <a href="/signin.html" class="button secondary">Sign in</a>
+            <a href="/signup.html" class="button primary">Sign up</a>
         </div>
     </nav>
 
-    <main>
-        <h1>Welcome to Roumes</h1>
-        <p>Your AI-powered assistant for seamless task management.</p>
-        <a href="/signin.html" class="cta-button">Get Started</a>
+    <main class="hero">
+        <h1>Your workspace.<br>Reimagined.</h1>
+        <p>Experience a new way to organize your work and life. Simple, powerful, and designed for the modern world.</p>
+        <div class="hero-buttons">
+            <a href="/signup.html" class="button primary">Get started</a>
+            <a href="#learn-more" class="button secondary">Learn more</a>
+        </div>
     </main>
 
     <script type="module">
         import { supabase } from './js/supabase.js';
-        import config from './js/config.js';
-
-        // Theme toggle functionality
-        const themeToggle = document.querySelector('.theme-toggle');
-        const html = document.documentElement;
-        
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', newTheme);
-            
-            // Update the icon
-            const sunIcon = themeToggle.querySelector('svg');
-            if (newTheme === 'light') {
-                sunIcon.innerHTML = '<path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 0C12.5523 0 13 0.447715 13 1V4C13 4.55228 12.5523 5 12 5C11.4477 5 11 4.55228 11 4V1C11 0.447715 11.4477 0 12 0ZM12 19C12.5523 19 13 19.4477 13 20V23C13 23.5523 12.5523 24 12 24C11.4477 24 11 23.5523 11 23V20C11 19.4477 11.4477 19 12 19ZM3.51472 3.51472C3.90524 3.1242 4.53841 3.1242 4.92893 3.51472L7.05025 5.63604C7.44078 6.02656 7.44078 6.65973 7.05025 7.05025C6.65973 7.44078 6.02656 7.44078 5.63604 7.05025L3.51472 4.92893C3.1242 4.53841 3.1242 3.90524 3.51472 3.51472ZM16.9497 16.9497C17.3403 16.5592 17.9734 16.5592 18.364 16.9497L20.4853 19.0711C20.8758 19.4616 20.8758 20.0948 20.4853 20.4853C20.0948 20.8758 19.4616 20.8758 19.0711 20.4853L16.9497 18.364C16.5592 17.9734 16.5592 17.3403 16.9497 16.9497ZM19.0711 3.51472C19.4616 3.90524 19.4616 4.53841 19.0711 4.92893L16.9497 7.05025C16.5592 7.44078 15.9261 7.44078 15.5355 7.05025C15.145 6.65973 15.145 6.02656 15.5355 5.63604L17.6569 3.51472C18.0474 3.1242 18.6805 3.1242 19.0711 3.51472ZM5.63604 16.9497C6.02656 16.5592 6.65973 16.5592 7.05025 16.9497L9.17157 19.0711C9.5621 19.4616 9.5621 20.0948 9.17157 20.4853C8.78105 20.8758 8.14788 20.8758 7.75736 20.4853L5.63604 18.364C5.24551 17.9734 5.24551 17.3403 5.63604 16.9497ZM23 12C23 12.5523 22.5523 13 22 13H19C18.4477 13 18 12.5523 18 12C18 11.4477 18.4477 11 19 11H22C22.5523 11 23 11.4477 23 12ZM6 12C6 12.5523 5.55228 13 5 13H2C1.44772 13 1 12.5523 1 12C1 11.4477 1.44772 11 2 11H5C5.55228 11 6 11.4477 6 12Z"/>';
-            } else {
-                sunIcon.innerHTML = '<path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"/>';
-            }
-        });
-
-        // Check if user is already authenticated
-        const checkAuth = async () => {
-            const { data: { session }, error } = await supabase.auth.getSession();
-            if (session) {
-                window.location.href = '/welcome.html';
-            }
-        };
-
-        checkAuth();
     </script>
 </body>
 </html> 
