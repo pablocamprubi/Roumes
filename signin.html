@@ -301,7 +301,10 @@
         // Google Sign In handler
         window.handleGoogleSignIn = async () => {
             try {
-                console.log('Starting Google Sign In...');
+                console.log('=== SIGNIN.HTML: Starting Google Sign In ===');
+                console.log('Current URL:', window.location.href);
+                console.log('Starting OAuth flow with Supabase...');
+                
                 const { data, error } = await supabase.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
@@ -314,14 +317,16 @@
                     throw error;
                 }
 
-                console.log('Google Sign In Success:', data);
+                console.log('OAuth initialization successful:', data);
                 // Redirect to the OAuth URL
                 if (data?.url) {
-                    console.log('Redirecting to:', data.url);
+                    console.log('Redirecting to Google OAuth URL:', data.url);
                     window.location.href = data.url;
+                } else {
+                    console.error('No OAuth URL received from Supabase');
                 }
             } catch (error) {
-                console.error('Error:', error.message);
+                console.error('Error in Google Sign In:', error.message);
                 const errorEl = document.getElementById('email-error');
                 errorEl.textContent = 'Failed to sign in with Google. Please try again.';
                 errorEl.style.display = 'block';
@@ -330,12 +335,17 @@
 
         // Initialize
         const init = async () => {
-            console.log('Initializing...');
+            console.log('=== SIGNIN.HTML: Initializing ===');
+            console.log('Current URL:', window.location.href);
+            console.log('Checking session...');
+            
             // Check if we have a session
             const { data: { session }, error } = await supabase.auth.getSession();
+            console.log('Session check result:', { session, error });
             
             if (session) {
-                console.log('Session found, redirecting to welcome page');
+                console.log('Active session found:', session.user.email);
+                console.log('Redirecting to welcome page...');
                 window.location.href = '/welcome.html';
                 return;
             }
@@ -346,21 +356,34 @@
             
             if (accessToken) {
                 console.log('Access token found in URL');
+                console.log('Token length:', accessToken.length);
                 try {
+                    console.log('Attempting to get user with access token...');
                     const { data: { user }, error } = await supabase.auth.getUser(accessToken);
-                    if (error) throw error;
+                    if (error) {
+                        console.error('Error getting user:', error);
+                        throw error;
+                    }
                     if (user) {
-                        console.log('User authenticated, redirecting to welcome page');
+                        console.log('User found:', user.email);
+                        console.log('Redirecting to welcome page...');
                         window.location.href = '/welcome.html';
                     }
                 } catch (error) {
-                    console.error('Error:', error.message);
+                    console.error('Error in access token flow:', error);
                     const errorEl = document.getElementById('email-error');
                     errorEl.textContent = 'Failed to complete authentication. Please try again.';
                     errorEl.style.display = 'block';
                 }
+            } else {
+                console.log('No access token in URL, ready for sign in');
             }
         };
+
+        // Listen for auth state changes
+        supabase.auth.onAuthStateChange((event, session) => {
+            console.log('Auth state changed:', event, session ? session.user.email : 'No session');
+        });
 
         init();
     </script>

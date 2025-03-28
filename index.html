@@ -314,41 +314,62 @@
         import { supabase } from './js/supabase.js';
 
         const init = async () => {
-            console.log('Checking authentication...');
+            console.log('=== INDEX.HTML: Starting authentication check ===');
+            console.log('Current URL:', window.location.href);
+            console.log('URL hash:', window.location.hash);
             
             // Check if we have an access token in the URL
             const params = new URLSearchParams(window.location.hash.substring(1));
             const accessToken = params.get('access_token');
             
             if (accessToken) {
-                console.log('Access token found, getting user...');
+                console.log('ACCESS TOKEN FOUND in URL');
+                console.log('Token length:', accessToken.length);
                 try {
+                    console.log('Attempting to get user with access token...');
                     const { data: { user }, error } = await supabase.auth.getUser(accessToken);
-                    if (error) throw error;
+                    if (error) {
+                        console.error('Error getting user:', error);
+                        throw error;
+                    }
                     if (user) {
-                        console.log('User found, redirecting to welcome page...');
+                        console.log('User found:', user.email);
+                        console.log('Redirecting to welcome page...');
                         window.location.href = '/welcome.html';
                         return;
+                    } else {
+                        console.log('No user found with access token');
                     }
                 } catch (error) {
-                    console.error('Error:', error);
+                    console.error('Error in access token flow:', error);
                     window.location.href = '/signin.html';
                     return;
                 }
+            } else {
+                console.log('No access token found in URL');
             }
 
             // Check if we have an existing session
+            console.log('Checking for existing session...');
             const { data: { session }, error } = await supabase.auth.getSession();
+            console.log('Session check result:', { session, error });
+            
             if (session) {
-                console.log('Session found, redirecting to welcome page...');
+                console.log('Active session found:', session.user.email);
+                console.log('Redirecting to welcome page...');
                 window.location.href = '/welcome.html';
                 return;
             }
 
             // No session, redirect to sign in
-            console.log('No session found, redirecting to sign in...');
+            console.log('No active session found, redirecting to sign in...');
             window.location.href = '/signin.html';
         };
+
+        // Listen for auth state changes
+        supabase.auth.onAuthStateChange((event, session) => {
+            console.log('Auth state changed:', event, session ? session.user.email : 'No session');
+        });
 
         init();
 
