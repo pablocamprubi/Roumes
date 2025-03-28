@@ -305,11 +305,7 @@
                 const { data, error } = await supabase.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
-                        redirectTo: 'https://roumes-hqu7794i1-pablos-projects-f3f598d6.vercel.app/welcome.html',
-                        queryParams: {
-                            access_type: 'offline',
-                            prompt: 'consent'
-                        }
+                        skipBrowserRedirect: true
                     }
                 });
 
@@ -319,6 +315,11 @@
                 }
 
                 console.log('Google Sign In Success:', data);
+                // Redirect to the OAuth URL
+                if (data?.url) {
+                    console.log('Redirecting to:', data.url);
+                    window.location.href = data.url;
+                }
             } catch (error) {
                 console.error('Error:', error.message);
                 const errorEl = document.getElementById('email-error');
@@ -329,11 +330,12 @@
 
         // Initialize
         const init = async () => {
+            console.log('Initializing...');
             // Check if we have a session
             const { data: { session }, error } = await supabase.auth.getSession();
             
             if (session) {
-                // Already logged in, redirect to welcome page
+                console.log('Session found, redirecting to welcome page');
                 window.location.href = '/welcome.html';
                 return;
             }
@@ -343,10 +345,12 @@
             const accessToken = params.get('access_token');
             
             if (accessToken) {
+                console.log('Access token found in URL');
                 try {
                     const { data: { user }, error } = await supabase.auth.getUser(accessToken);
                     if (error) throw error;
                     if (user) {
+                        console.log('User authenticated, redirecting to welcome page');
                         window.location.href = '/welcome.html';
                     }
                 } catch (error) {
