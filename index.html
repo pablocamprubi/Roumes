@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maton-style Interface</title>
+    <title>Maton</title>
     <style>
         :root[data-theme="dark"] {
             --bg-primary: #1a1a1a;
@@ -185,6 +185,70 @@
             color: var(--text-secondary);
             text-decoration: none;
         }
+
+        .user-menu {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-button {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.5rem;
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: block;
+            border-radius: 4px;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--bg-primary);
+        }
+
+        .auth-buttons {
+            display: none;
+        }
+
+        .auth-buttons.show {
+            display: flex;
+        }
     </style>
 </head>
 <body>
@@ -197,9 +261,21 @@
                 </svg>
             </button>
         </div>
-        <div class="nav-buttons">
+        <div class="auth-buttons show">
             <a href="signin.html" class="button secondary">Sign In</a>
             <button class="button primary">Sign Up</button>
+        </div>
+        <div class="user-menu" style="display: none;">
+            <button class="user-button">
+                <span class="user-avatar">U</span>
+                <span class="user-name">User</span>
+            </button>
+            <div class="dropdown-menu">
+                <a href="#" class="dropdown-item" id="profile-link">Profile</a>
+                <a href="#" class="dropdown-item" id="settings-link">Settings</a>
+                <hr style="border: none; border-top: 1px solid var(--border-color); margin: 0.5rem 0;">
+                <a href="#" class="dropdown-item" onclick="handleSignOut()">Sign Out</a>
+            </div>
         </div>
     </nav>
 
@@ -233,7 +309,10 @@
         </div>
     </footer>
 
-    <script>
+    <script type="module">
+        import { supabase } from './js/supabase.js';
+
+        // Theme toggle functionality
         const themeToggle = document.querySelector('.theme-toggle');
         const html = document.documentElement;
         
@@ -250,6 +329,72 @@
                 sunIcon.innerHTML = '<path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"/>';
             }
         });
+
+        // User menu functionality
+        const userButton = document.querySelector('.user-button');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+        const userMenu = document.querySelector('.user-menu');
+        const authButtons = document.querySelector('.auth-buttons');
+
+        userButton?.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!userButton?.contains(event.target)) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+
+        // Sign out handler
+        window.handleSignOut = async () => {
+            try {
+                const { error } = await supabase.auth.signOut();
+                if (error) throw error;
+                // Redirect will be handled by onAuthStateChange in supabase.js
+            } catch (error) {
+                console.error('Error signing out:', error.message);
+            }
+        };
+
+        // Update UI based on auth state
+        const updateUI = (user) => {
+            if (user) {
+                userMenu.style.display = 'block';
+                authButtons.classList.remove('show');
+                
+                // Update user info
+                const userAvatar = document.querySelector('.user-avatar');
+                const userName = document.querySelector('.user-name');
+                
+                // Set user initial or image
+                if (user.user_metadata?.avatar_url) {
+                    userAvatar.innerHTML = `<img src="${user.user_metadata.avatar_url}" alt="User avatar" style="width: 100%; height: 100%; border-radius: 50%;">`;
+                } else {
+                    userAvatar.textContent = (user.email || 'U')[0].toUpperCase();
+                }
+                
+                // Set user name or email
+                userName.textContent = user.user_metadata?.full_name || user.email;
+            } else {
+                userMenu.style.display = 'none';
+                authButtons.classList.add('show');
+            }
+        };
+
+        // Check initial auth state
+        const checkUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            updateUI(user);
+        };
+
+        // Listen for auth state changes
+        supabase.auth.onAuthStateChange((event, session) => {
+            updateUI(session?.user);
+        });
+
+        checkUser();
     </script>
 </body>
 </html> 

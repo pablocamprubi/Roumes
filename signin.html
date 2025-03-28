@@ -251,7 +251,9 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import { supabase } from './js/supabase.js';
+
         // Theme toggle functionality
         const themeToggle = document.querySelector('.theme-toggle');
         const html = document.documentElement;
@@ -270,8 +272,8 @@
             }
         });
 
-        // Form submission handler
-        function handleSubmit(event) {
+        // Form submission handler for email/password
+        window.handleSubmit = async (event) => {
             event.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
@@ -280,33 +282,52 @@
             document.getElementById('email-error').style.display = 'none';
             document.getElementById('password-error').style.display = 'none';
 
-            // Basic validation
-            let hasError = false;
-            if (!email.includes('@')) {
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+
+                if (error) throw error;
+
+                // Redirect will be handled by onAuthStateChange in supabase.js
+            } catch (error) {
+                console.error('Error:', error.message);
                 const errorEl = document.getElementById('email-error');
-                errorEl.textContent = 'Please enter a valid email address';
+                errorEl.textContent = error.message;
                 errorEl.style.display = 'block';
-                hasError = true;
             }
-
-            if (password.length < 6) {
-                const errorEl = document.getElementById('password-error');
-                errorEl.textContent = 'Password must be at least 6 characters';
-                errorEl.style.display = 'block';
-                hasError = true;
-            }
-
-            if (!hasError) {
-                // Here you would typically make an API call to your authentication endpoint
-                console.log('Signing in with:', { email, password });
-            }
-        }
+        };
 
         // Google Sign In handler
-        function handleGoogleSignIn() {
-            // Here you would typically initialize and call the Google Sign-In API
-            console.log('Initiating Google Sign In');
-        }
+        window.handleGoogleSignIn = async () => {
+            try {
+                const { data, error } = await supabase.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        redirectTo: window.location.origin
+                    }
+                });
+
+                if (error) throw error;
+                // Redirect will be handled automatically by Supabase
+            } catch (error) {
+                console.error('Error:', error.message);
+                const errorEl = document.getElementById('email-error');
+                errorEl.textContent = 'Failed to sign in with Google. Please try again.';
+                errorEl.style.display = 'block';
+            }
+        };
+
+        // Check if user is already signed in
+        const checkUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                window.location.href = '/index.html';
+            }
+        };
+
+        checkUser();
     </script>
 </body>
 </html> 
