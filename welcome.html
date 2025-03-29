@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Roumes</title>
+    <title>Roumes</title>
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/welcome.css">
+    <link rel="stylesheet" href="css/integrations.css">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="js/config.js"></script>
     <script src="js/supabase.js"></script>
@@ -23,13 +24,13 @@
                     </svg>
                     Home
                 </a>
-                <a href="welcome.html" class="nav-link active">
+                <a href="#chat" class="nav-link active" data-section="chat">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                     </svg>
                     Chat
                 </a>
-                <a href="integrations.html" class="nav-link">
+                <a href="#integrations" class="nav-link" data-section="integrations">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
                     </svg>
@@ -68,13 +69,49 @@
                     <path d="M19 12H5M12 19l-7-7 7-7"/>
                 </svg>
             </button>
-            <div class="chat-container">
-                <!-- Chat messages will be added here -->
+            
+            <!-- Chat Section -->
+            <div class="section-content" id="chat-section">
+                <div class="chat-container">
+                    <!-- Chat messages will be added here -->
+                </div>
+                <div class="chat-input-container">
+                    <div class="chat-input-wrapper">
+                        <textarea class="chat-input" placeholder="Type a message..." rows="1"></textarea>
+                        <button class="send-button">Send</button>
+                    </div>
+                </div>
             </div>
-            <div class="chat-input-container">
-                <div class="chat-input-wrapper">
-                    <textarea class="chat-input" placeholder="Type a message..." rows="1"></textarea>
-                    <button class="send-button">Send</button>
+
+            <!-- Integrations Section -->
+            <div class="section-content" id="integrations-section" style="display: none;">
+                <div class="integrations-container">
+                    <h1>Integrations</h1>
+                    <p class="subtitle">Connect your accounts to allow access to your apps.</p>
+                    
+                    <div class="search-container">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                        <input type="text" placeholder="Search..." class="search-input">
+                    </div>
+
+                    <div class="integrations-grid">
+                        <!-- Integration cards from integrations.html -->
+                        <div class="integration-card">
+                            <div class="integration-icon hubspot">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                                </svg>
+                            </div>
+                            <h3>HubSpot</h3>
+                            <p>Connect your HubSpot account to sync contacts and deals.</p>
+                            <button class="connect-button">Connect HubSpot</button>
+                        </div>
+
+                        <!-- Add other integration cards here -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -84,16 +121,40 @@
         import { supabase } from './js/supabase.js';
         import config from './js/config.js';
 
-        // Add base URL to navigation links
-        function updateNavigationLinks() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                if (link.getAttribute('href') && link.getAttribute('href') !== '#') {
-                    link.href = `${config.baseUrl}/${link.getAttribute('href')}`;
+        // Section switching
+        function showSection(sectionId) {
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(`${sectionId}-section`).style.display = 'block';
+
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-section') === sectionId) {
+                    link.classList.add('active');
                 }
             });
         }
-        updateNavigationLinks();
+
+        // Handle navigation
+        document.querySelectorAll('.nav-link[data-section]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = link.getAttribute('data-section');
+                showSection(section);
+                history.pushState(null, '', `#${section}`);
+            });
+        });
+
+        // Handle initial load and browser back/forward
+        function handleLocationHash() {
+            const hash = window.location.hash.slice(1) || 'chat';
+            showSection(hash);
+        }
+        
+        window.addEventListener('hashchange', handleLocationHash);
+        handleLocationHash();
 
         // Toggle sidebar
         const sidebar = document.querySelector('.sidebar');
@@ -160,6 +221,22 @@
             }
         }
         getUserEmail();
+
+        // Handle search in integrations
+        const searchInput = document.querySelector('.search-input');
+        const integrationCards = document.querySelectorAll('.integration-card');
+
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                integrationCards.forEach(card => {
+                    const title = card.querySelector('h3').textContent.toLowerCase();
+                    const description = card.querySelector('p').textContent.toLowerCase();
+                    const isVisible = title.includes(searchTerm) || description.includes(searchTerm);
+                    card.style.display = isVisible ? 'block' : 'none';
+                });
+            });
+        }
 
         // Prevent form submission on enter (allow shift+enter for new lines)
         textarea.addEventListener('keydown', (e) => {
