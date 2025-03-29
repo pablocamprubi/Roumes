@@ -279,7 +279,8 @@
 
                 if (error) throw error;
 
-                // Redirect will be handled by auth state change in supabase.js
+                // Explicitly redirect to welcome page after successful login
+                window.location.href = `${config.redirectUrl}/welcome.html`;
             } catch (error) {
                 console.error('Error:', error.message);
                 emailError.textContent = error.message;
