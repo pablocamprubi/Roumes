@@ -203,6 +203,18 @@
 
     <script type="module">
         import { supabase } from './js/supabase.js';
+        import config from './js/config.js';
+
+        // Add base URL to navigation links
+        function updateNavigationLinks() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') && link.getAttribute('href') !== '#') {
+                    link.href = `${config.baseUrl}/${link.getAttribute('href')}`;
+                }
+            });
+        }
+        updateNavigationLinks();
 
         // Toggle sidebar
         const sidebar = document.querySelector('.sidebar');
