@@ -288,13 +288,10 @@
         </div>
     </div>
 
-    <script type="module">
-        import { supabase } from './js/supabase.js';
-        import config from './js/config.js';
-
+    <script>
         // Handle sidebar toggle
         const sidebar = document.querySelector('.sidebar');
-        const toggleButton = document.querySelector('.toggle-button');
+        const toggleButton = document.querySelector('.toggle-sidebar');
         const sidebarState = localStorage.getItem('sidebarState');
 
         if (sidebarState === 'closed') {
@@ -310,11 +307,11 @@
 
         // Handle section navigation
         const sections = document.querySelectorAll('.section');
-        const navItems = document.querySelectorAll('.nav-item');
+        const navItems = document.querySelectorAll('.nav-link');
 
         function showSection(sectionId) {
             sections.forEach(section => {
-                section.style.display = section.id === sectionId ? 'block' : 'none';
+                section.classList.toggle('active', section.id === sectionId);
             });
 
             navItems.forEach(item => {
@@ -374,30 +371,13 @@
             });
         });
 
-        // Handle user popup
-        const userInfo = document.querySelector('.user-info');
-        const userPopup = document.querySelector('.user-popup');
-        const logoutButton = document.querySelector('.logout-button');
-
-        userInfo.addEventListener('click', (e) => {
-            e.stopPropagation();
-            userPopup.classList.toggle('visible');
-        });
-
-        // Close popup when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!userInfo.contains(e.target) && !userPopup.contains(e.target)) {
-                userPopup.classList.remove('visible');
-            }
-        });
-
         // Handle logout
-        logoutButton.addEventListener('click', async () => {
+        async function handleLogout() {
             const { error } = await supabase.auth.signOut();
             if (!error) {
                 window.location.href = 'index.html';
             }
-        });
+        }
 
         // Get and display user email
         async function getUserEmail() {
