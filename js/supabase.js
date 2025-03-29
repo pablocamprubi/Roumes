@@ -10,10 +10,10 @@ supabase.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN' && currentPath !== 'welcome.html') {
         console.log('User signed in:', session.user)
         // Only redirect to welcome page if not already there
-        window.location.href = `${config.baseUrl}/welcome.html`
+        window.location.href = `${config.redirectUrl}/welcome.html`
     } else if (event === 'SIGNED_OUT' && currentPath !== 'signin.html') {
         console.log('User signed out')
         // Only redirect to sign in page if not already there
-        window.location.href = `${config.baseUrl}/signin.html`
+        window.location.href = `${config.redirectUrl}/signin.html`
     }
 }) 
