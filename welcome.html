@@ -106,6 +106,48 @@
             left: 1.5rem;
             color: var(--text-secondary);
             font-size: 0.9rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .user-email:hover {
+            background-color: var(--bg-secondary);
+        }
+
+        .logout-popup {
+            position: fixed;
+            bottom: 3.5rem;
+            left: 1.5rem;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--button-secondary-border);
+            border-radius: 6px;
+            padding: 0.5rem;
+            display: none;
+        }
+
+        .logout-popup.show {
+            display: block;
+        }
+
+        .logout-button {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .logout-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
@@ -127,6 +169,16 @@
     </div>
 
     <div class="user-email" id="userEmail">Loading...</div>
+    <div class="logout-popup" id="logoutPopup">
+        <button class="logout-button" onclick="handleLogout()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Sign out
+        </button>
+    </div>
 
     <script type="module">
         import { supabase } from './js/supabase.js';
@@ -137,7 +189,23 @@
             document.getElementById('userEmail').textContent = user.email;
         }
 
-        // Handle logout (if needed)
+        // Handle logout popup
+        const userEmail = document.getElementById('userEmail');
+        const logoutPopup = document.getElementById('logoutPopup');
+        
+        userEmail.addEventListener('click', (e) => {
+            e.stopPropagation();
+            logoutPopup.classList.toggle('show');
+        });
+
+        // Close popup when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!userEmail.contains(e.target) && !logoutPopup.contains(e.target)) {
+                logoutPopup.classList.remove('show');
+            }
+        });
+
+        // Handle logout
         window.handleLogout = async () => {
             try {
                 const { error } = await supabase.auth.signOut();
