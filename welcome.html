@@ -12,7 +12,7 @@
             --text-secondary: #888888;
             --accent-color: #0070f3;
             --button-secondary-border: #333333;
-            --button-hover-bg: #222222;
+            --input-bg: #f2f2f2;
         }
 
         * {
@@ -29,57 +29,104 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             padding: 2rem;
+            position: relative;
         }
 
-        .container {
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--button-secondary-border);
-            border-radius: 12px;
-            padding: 2rem;
+        .main-content {
+            max-width: 800px;
             width: 100%;
-            max-width: 400px;
             text-align: center;
+            margin-top: 15vh;
         }
 
-        .logo {
-            font-size: 1.5rem;
+        h1 {
+            font-size: 2.5rem;
             font-weight: 600;
             margin-bottom: 2rem;
             color: var(--text-primary);
         }
 
-        .email {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            word-break: break-all;
+        .input-container {
+            width: 100%;
+            position: relative;
         }
 
-        .logout-button {
-            background: transparent;
-            border: 1px solid var(--button-secondary-border);
-            color: var(--text-primary);
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
+        .action-input {
+            width: 100%;
+            padding: 1rem;
             font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--input-bg);
+            color: #000;
         }
 
-        .logout-button:hover {
-            background: var(--button-hover-bg);
-            border-color: var(--accent-color);
+        .action-input:focus {
+            outline: none;
+        }
+
+        .submit-button {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .submit-button:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .connection-text {
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .connection-text a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .connection-text a:hover {
+            text-decoration: underline;
+        }
+
+        .user-email {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">Roumes</div>
-        <div class="email" id="userEmail">Loading...</div>
-        <button class="logout-button" onclick="handleLogout()">Sign out</button>
+    <div class="main-content">
+        <h1>What can I do for you?</h1>
+        <div class="input-container">
+            <input type="text" class="action-input" placeholder="Ask Maton to take action..." />
+            <button class="submit-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+            </button>
+        </div>
+        <p class="connection-text">
+            Grant access to your apps by connecting your accounts <a href="#">here</a>
+        </p>
     </div>
+
+    <div class="user-email" id="userEmail">Loading...</div>
 
     <script type="module">
         import { supabase } from './js/supabase.js';
@@ -92,7 +139,7 @@
             window.location.href = '/signin.html';
         }
 
-        // Handle logout
+        // Handle logout (if needed)
         window.handleLogout = async () => {
             try {
                 const { error } = await supabase.auth.signOut();
