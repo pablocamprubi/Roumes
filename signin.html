@@ -279,8 +279,11 @@
 
                 if (error) throw error;
 
-                // Explicitly redirect to welcome page after successful login
-                window.location.href = `${config.redirectUrl}/welcome.html`;
+                // Only redirect if we're not already on welcome.html
+                const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+                if (currentPath !== 'welcome.html') {
+                    window.location.href = `${config.redirectUrl}/welcome.html`;
+                }
             } catch (error) {
                 console.error('Error:', error.message);
                 emailError.textContent = error.message;
