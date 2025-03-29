@@ -129,7 +129,7 @@
         logoutButton.addEventListener('click', async () => {
             const { error } = await supabase.auth.signOut();
             if (!error) {
-                window.location.href = '/';
+                window.location.href = 'index.html';
             }
         });
 

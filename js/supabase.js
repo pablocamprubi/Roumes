@@ -5,15 +5,15 @@ export const supabase = createClient(config.supabaseUrl, config.supabaseAnonKey)
 
 // Handle auth state changes
 supabase.auth.onAuthStateChange((event, session) => {
-    const currentPath = window.location.pathname;
+    const currentPath = window.location.pathname.split('/').pop();
     
-    if (event === 'SIGNED_IN' && currentPath !== '/welcome.html') {
+    if (event === 'SIGNED_IN' && currentPath !== 'welcome.html') {
         console.log('User signed in:', session.user)
         // Only redirect to welcome page if not already there
-        window.location.href = '/welcome.html'
-    } else if (event === 'SIGNED_OUT' && currentPath !== '/signin.html') {
+        window.location.href = 'welcome.html'
+    } else if (event === 'SIGNED_OUT' && currentPath !== 'signin.html') {
         console.log('User signed out')
         // Only redirect to sign in page if not already there
-        window.location.href = '/signin.html'
+        window.location.href = 'signin.html'
     }
 }) 
