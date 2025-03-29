@@ -1,27 +1,122 @@
+.chat-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--button-secondary-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.chat-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.action-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--button-secondary-border);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.action-button:hover {
+    background: var(--button-secondary-hover-bg);
+    color: var(--text-primary);
+}
+
+.action-button.small {
+    padding: 0.25rem;
+}
+
 .chat-container {
     flex: 1;
     padding: 1rem;
     overflow-y: auto;
 }
 
+.message-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.message {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.message.assistant {
+    align-items: flex-start;
+}
+
+.message.user {
+    align-items: flex-end;
+}
+
+.message-content {
+    background: var(--bg-secondary);
+    padding: 1rem;
+    border-radius: 12px;
+    max-width: 80%;
+}
+
+.message.user .message-content {
+    background: var(--accent-color);
+    color: white;
+}
+
+.message-content p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.message-actions {
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.message:hover .message-actions {
+    opacity: 1;
+}
+
 .chat-input-container {
     padding: 1rem;
     border-top: 1px solid var(--button-secondary-border);
+    background: var(--bg-primary);
 }
 
 .chat-input-wrapper {
     display: flex;
     gap: 1rem;
     align-items: flex-end;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .chat-input {
     flex: 1;
     background-color: var(--bg-secondary);
     border: 1px solid var(--button-secondary-border);
-    border-radius: 6px;
+    border-radius: 12px;
     color: var(--text-primary);
-    padding: 0.75rem;
+    padding: 0.75rem 1rem;
     resize: none;
     min-height: 20px;
     max-height: 200px;
@@ -39,13 +134,24 @@
     background-color: var(--accent-color);
     color: white;
     border: none;
-    border-radius: 6px;
-    padding: 0.75rem 1rem;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    font-size: 0.9rem;
     transition: opacity 0.2s ease;
 }
 
 .send-button:hover {
     opacity: 0.9;
+}
+
+.input-info {
+    text-align: center;
+    margin-top: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
 } 

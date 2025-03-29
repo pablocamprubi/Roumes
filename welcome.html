@@ -18,29 +18,17 @@
                 <div class="logo">Roumes</div>
             </div>
             <nav class="nav-links">
-                <a href="index.html" class="nav-link">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                    </svg>
-                    Home
-                </a>
                 <a href="#chat" class="nav-link active" data-section="chat">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                     Chat
                 </a>
                 <a href="#integrations" class="nav-link" data-section="integrations">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                     Integrations
                 </a>
-                <a href="#" class="nav-link">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
-                    </svg>
-                    Subscription
+                <a href="#billing" class="nav-link" data-section="billing">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    Billing
                 </a>
             </nav>
             <div class="user-section">
@@ -71,46 +59,237 @@
             </button>
             
             <!-- Chat Section -->
-            <div class="section-content" id="chat-section">
-                <div class="chat-container">
-                    <!-- Chat messages will be added here -->
+            <div id="chat" class="section">
+                <div class="chat-header">
+                    <h1>Chat</h1>
+                    <div class="chat-actions">
+                        <button class="action-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                            New Chat
+                        </button>
+                        <button class="action-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            Search
+                        </button>
+                    </div>
                 </div>
-                <div class="chat-input-container">
-                    <div class="chat-input-wrapper">
-                        <textarea class="chat-input" placeholder="Type a message..." rows="1"></textarea>
-                        <button class="send-button">Send</button>
+                <div class="chat-container">
+                    <div class="message-list">
+                        <div class="message">
+                            <div class="message-content">
+                                <p>Welcome to Roumes! How can I help you today?</p>
+                            </div>
+                            <div class="message-time">12:00 PM</div>
+                        </div>
+                        <div class="message user">
+                            <div class="message-content">
+                                <p>Hi! I'd like to learn more about the available integrations.</p>
+                            </div>
+                            <div class="message-time">12:01 PM</div>
+                        </div>
+                        <div class="message">
+                            <div class="message-content">
+                                <p>Of course! We have several integrations available. You can check them out in the Integrations tab. Would you like me to walk you through some of our most popular ones?</p>
+                            </div>
+                            <div class="message-time">12:01 PM</div>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <textarea placeholder="Type your message..." rows="1"></textarea>
+                        <button class="send-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        </button>
+                        <div class="input-info">Press Enter to send, Shift + Enter for new line</div>
                     </div>
                 </div>
             </div>
 
             <!-- Integrations Section -->
-            <div class="section-content" id="integrations-section" style="display: none;">
+            <div id="integrations" class="section" style="display: none;">
                 <div class="integrations-container">
-                    <h1>Integrations</h1>
-                    <p class="subtitle">Connect your accounts to allow access to your apps.</p>
-                    
-                    <div class="search-container">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"/>
-                            <path d="M21 21l-4.35-4.35"/>
-                        </svg>
-                        <input type="text" placeholder="Search..." class="search-input">
+                    <div class="integrations-header">
+                        <h1>Integrations</h1>
+                        <p>Connect your favorite tools and services to enhance your experience.</p>
                     </div>
-
+                    <div class="search-bar">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" placeholder="Search integrations...">
+                    </div>
                     <div class="integrations-grid">
-                        <!-- Integration cards from integrations.html -->
                         <div class="integration-card">
-                            <div class="integration-icon hubspot">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-                                </svg>
+                            <div class="integration-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
                             </div>
-                            <h3>HubSpot</h3>
-                            <p>Connect your HubSpot account to sync contacts and deals.</p>
-                            <button class="connect-button">Connect HubSpot</button>
+                            <h3>File Storage</h3>
+                            <p>Connect to Google Drive, Dropbox, or OneDrive to access your files directly.</p>
+                            <div class="integration-actions">
+                                <button class="integration-button primary">Connect</button>
+                                <button class="integration-button secondary">Learn More</button>
+                            </div>
                         </div>
+                        <div class="integration-card">
+                            <div class="integration-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            </div>
+                            <h3>Email Integration</h3>
+                            <p>Connect your email accounts to send and receive messages seamlessly.</p>
+                            <div class="integration-actions">
+                                <button class="integration-button primary">Connect</button>
+                                <button class="integration-button secondary">Learn More</button>
+                            </div>
+                        </div>
+                        <div class="integration-card">
+                            <div class="integration-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                            </div>
+                            <h3>Calendar</h3>
+                            <p>Sync with Google Calendar or Outlook to manage your schedule.</p>
+                            <div class="integration-actions">
+                                <button class="integration-button primary">Connect</button>
+                                <button class="integration-button secondary">Learn More</button>
+                            </div>
+                        </div>
+                        <div class="integration-card">
+                            <div class="integration-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                            </div>
+                            <h3>Project Management</h3>
+                            <p>Connect to Jira, Trello, or Asana to track your tasks and projects.</p>
+                            <div class="integration-actions">
+                                <button class="integration-button primary">Connect</button>
+                                <button class="integration-button secondary">Learn More</button>
+                            </div>
+                        </div>
+                        <div class="integration-card">
+                            <div class="integration-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                            </div>
+                            <h3>Team Chat</h3>
+                            <p>Integrate with Slack or Microsoft Teams for seamless communication.</p>
+                            <div class="integration-actions">
+                                <button class="integration-button primary">Connect</button>
+                                <button class="integration-button secondary">Learn More</button>
+                            </div>
+                        </div>
+                        <div class="integration-card">
+                            <div class="integration-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                            </div>
+                            <h3>AI Tools</h3>
+                            <p>Connect to OpenAI, Claude, or other AI services to enhance your workflow.</p>
+                            <div class="integration-actions">
+                                <button class="integration-button primary">Connect</button>
+                                <button class="integration-button secondary">Learn More</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                        <!-- Add other integration cards here -->
+            <!-- Billing Section -->
+            <div id="billing" class="section" style="display: none;">
+                <div class="billing-container">
+                    <h1>Choose Your Plan</h1>
+                    <div class="plans-grid">
+                        <div class="plan-card">
+                            <div class="plan-header">
+                                <h3>Basic</h3>
+                                <div class="price">
+                                    <span class="amount">$9</span>
+                                    <span class="period">/month</span>
+                                </div>
+                            </div>
+                            <div class="plan-features">
+                                <ul>
+                                    <li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        Up to 3 integrations
+                                    </li>
+                                    <li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        Basic chat features
+                                    </li>
+                                    <li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        5GB storage
+                                    </li>
+                                    <li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        Email support
+                                    </li>
+                                </ul>
+                            </div>
+                            <button class="plan-button">Get Started</button>
+                        </div>
+                        <div class="plan-card popular">
+                            <div class="popular-badge">Most Popular</div>
+                            <div class="plan-header">
+                                <h3>Pro</h3>
+                                <div class="price">
+                                    <span class="amount">$29</span>
+                                    <span class="period">/month</span>
+                                </div>
+                            </div>
+                            <div class="plan-features">
+                                <ul>
+                                    <li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        Unlimited integrations
+                                    </li>
+                                    <li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        Advanced chat features
+                                    </li>
+                                    <li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        50GB storage
+                                    </li>
+                                    <li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        Priority support
+                                    </li>
+                                    <li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        Custom integrations
+                                    </li>
+                                </ul>
+                            </div>
+                            <button class="plan-button primary">Get Started</button>
+                        </div>
+                        <div class="plan-card">
+                            <div class="plan-header">
+                                <h3>Enterprise</h3>
+                                <div class="price">
+                                    <span class="amount">$99</span>
+                                    <span class="period">/month</span>
+                                </div>
+                            </div>
+                            <div class="plan-features">
+                                <ul>
+                                    <li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        Everything in Pro
+                                    </li>
+                                    <li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        Dedicated support
+                                    </li>
+                                    <li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        Unlimited storage
+                                    </li>
+                                    <li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        Custom development
+                                    </li>
+                                    <li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        SLA guarantee
+                                    </li>
+                                </ul>
+                            </div>
+                            <button class="plan-button">Contact Sales</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -121,64 +300,85 @@
         import { supabase } from './js/supabase.js';
         import config from './js/config.js';
 
-        // Section switching
-        function showSection(sectionId) {
-            document.querySelectorAll('.section-content').forEach(section => {
-                section.style.display = 'none';
-            });
-            document.getElementById(`${sectionId}-section`).style.display = 'block';
+        // Handle sidebar toggle
+        const sidebar = document.querySelector('.sidebar');
+        const toggleButton = document.querySelector('.toggle-button');
+        const sidebarState = localStorage.getItem('sidebarState');
 
-            // Update active nav link
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('data-section') === sectionId) {
-                    link.classList.add('active');
-                }
+        if (sidebarState === 'closed') {
+            sidebar.classList.add('closed');
+            document.body.classList.add('sidebar-closed');
+        }
+
+        toggleButton.addEventListener('click', () => {
+            sidebar.classList.toggle('closed');
+            document.body.classList.toggle('sidebar-closed');
+            localStorage.setItem('sidebarState', sidebar.classList.contains('closed') ? 'closed' : 'open');
+        });
+
+        // Handle section navigation
+        const sections = document.querySelectorAll('.section');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        function showSection(sectionId) {
+            sections.forEach(section => {
+                section.style.display = section.id === sectionId ? 'block' : 'none';
+            });
+
+            navItems.forEach(item => {
+                item.classList.toggle('active', item.getAttribute('data-section') === sectionId);
             });
         }
 
-        // Handle navigation
-        document.querySelectorAll('.nav-link[data-section]').forEach(link => {
-            link.addEventListener('click', (e) => {
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
                 e.preventDefault();
-                const section = link.getAttribute('data-section');
-                showSection(section);
-                history.pushState(null, '', `#${section}`);
+                const sectionId = item.getAttribute('data-section');
+                showSection(sectionId);
+                history.pushState(null, '', item.getAttribute('href'));
             });
         });
 
-        // Handle initial load and browser back/forward
-        function handleLocationHash() {
+        // Handle browser back/forward
+        window.addEventListener('popstate', () => {
             const hash = window.location.hash.slice(1) || 'chat';
             showSection(hash);
-        }
-        
-        window.addEventListener('hashchange', handleLocationHash);
-        handleLocationHash();
-
-        // Toggle sidebar
-        const sidebar = document.querySelector('.sidebar');
-        const toggleButton = document.querySelector('.toggle-sidebar');
-        const mainContent = document.querySelector('.main-content');
-        
-        toggleButton.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-            const isCollapsed = sidebar.classList.contains('collapsed');
-            toggleButton.innerHTML = isCollapsed 
-                ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>'
-                : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>';
         });
 
-        // Store sidebar state in localStorage
-        const sidebarState = localStorage.getItem('sidebarState');
-        if (sidebarState === 'collapsed') {
-            sidebar.classList.add('collapsed');
-            toggleButton.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
-        }
+        // Show initial section based on URL hash
+        const initialHash = window.location.hash.slice(1) || 'chat';
+        showSection(initialHash);
 
-        toggleButton.addEventListener('click', () => {
-            const isCollapsed = sidebar.classList.contains('collapsed');
-            localStorage.setItem('sidebarState', isCollapsed ? 'collapsed' : 'expanded');
+        // Handle chat textarea auto-resize
+        const textarea = document.querySelector('.chat-input textarea');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // Handle Enter key in textarea
+        textarea.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                // Here you would typically send the message
+                console.log('Message:', this.value.trim());
+                this.value = '';
+                this.style.height = 'auto';
+            }
+        });
+
+        // Handle search functionality
+        const searchInput = document.querySelector('.search-bar input');
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const cards = document.querySelectorAll('.integration-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+                const isVisible = title.includes(query) || description.includes(query);
+                card.style.display = isVisible ? 'block' : 'none';
+            });
         });
 
         // Handle user popup
@@ -206,13 +406,6 @@
             }
         });
 
-        // Auto-resize textarea
-        const textarea = document.querySelector('.chat-input');
-        textarea.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 200) + 'px';
-        });
-
         // Get and display user email
         async function getUserEmail() {
             const { data: { user } } = await supabase.auth.getUser();
@@ -221,30 +414,6 @@
             }
         }
         getUserEmail();
-
-        // Handle search in integrations
-        const searchInput = document.querySelector('.search-input');
-        const integrationCards = document.querySelectorAll('.integration-card');
-
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                const searchTerm = e.target.value.toLowerCase();
-                integrationCards.forEach(card => {
-                    const title = card.querySelector('h3').textContent.toLowerCase();
-                    const description = card.querySelector('p').textContent.toLowerCase();
-                    const isVisible = title.includes(searchTerm) || description.includes(searchTerm);
-                    card.style.display = isVisible ? 'block' : 'none';
-                });
-            });
-        }
-
-        // Prevent form submission on enter (allow shift+enter for new lines)
-        textarea.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                // TODO: Handle message sending
-            }
-        });
     </script>
 </body>
 </html> 
