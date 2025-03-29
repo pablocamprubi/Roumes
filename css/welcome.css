@@ -35,29 +35,30 @@ body {
 }
 
 .sidebar-header {
-    padding: 1rem;
+    padding: 1.5rem;
     border-bottom: 1px solid var(--button-secondary-border);
 }
 
 .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: 1.25rem;
+    font-weight: 600;
     color: var(--text-primary);
 }
 
 .nav-links {
-    padding: 1rem;
+    padding: 1rem 0.75rem;
 }
 
 .nav-link {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.5rem;
+    gap: 1rem;
+    padding: 0.75rem;
     color: var(--text-secondary);
     text-decoration: none;
     border-radius: 6px;
     transition: all 0.2s ease;
+    font-size: 0.9rem;
 }
 
 .nav-link:hover {
@@ -65,9 +66,22 @@ body {
     color: var(--text-primary);
 }
 
+.nav-link.active {
+    color: var(--text-primary);
+}
+
+.nav-link svg {
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.nav-link:hover svg {
+    opacity: 1;
+}
+
 .user-section {
     margin-top: auto;
-    padding-top: 1rem;
+    padding: 1rem 0.75rem;
     border-top: 1px solid var(--button-secondary-border);
     position: relative;
 }
@@ -76,7 +90,7 @@ body {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.5rem;
+    padding: 0.75rem;
     color: var(--text-secondary);
     font-size: 0.9rem;
     cursor: pointer;
@@ -92,9 +106,9 @@ body {
 .user-popup {
     position: absolute;
     bottom: 100%;
-    left: 0;
-    right: 0;
-    margin: 0.5rem;
+    left: 0.75rem;
+    right: 0.75rem;
+    margin-bottom: 0.5rem;
     background-color: var(--bg-primary);
     border: 1px solid var(--button-secondary-border);
     border-radius: 6px;
@@ -112,7 +126,7 @@ body {
     align-items: center;
     gap: 0.75rem;
     width: 100%;
-    padding: 0.5rem;
+    padding: 0.75rem;
     background: none;
     border: none;
     border-radius: 4px;
@@ -218,6 +232,7 @@ body {
         height: 100vh;
         left: 0;
         top: 0;
+        z-index: 1000;
     }
 
     .main-content {
