@@ -5,12 +5,17 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: var(--bg-primary);
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .chat-header h1 {
     font-size: 1.5rem;
     font-weight: 600;
     margin: 0;
+    color: var(--text-primary);
 }
 
 .chat-actions {
@@ -35,6 +40,7 @@
 .action-button:hover {
     background: var(--button-secondary-hover-bg);
     color: var(--text-primary);
+    border-color: var(--accent-color);
 }
 
 .action-button.small {
@@ -47,6 +53,9 @@
     flex-direction: column;
     overflow: hidden;
     margin-top: 1rem;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
 }
 
 .message-list {
@@ -64,6 +73,7 @@
     border-radius: 12px;
     background: var(--bg-secondary);
     border: 1px solid var(--button-secondary-border);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .message.user {
@@ -88,6 +98,8 @@
     padding: 1rem;
     border-top: 1px solid var(--button-secondary-border);
     background: var(--bg-primary);
+    position: sticky;
+    bottom: 0;
 }
 
 .chat-input textarea {
@@ -100,11 +112,15 @@
     resize: none;
     min-height: 40px;
     max-height: 200px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    line-height: 1.5;
 }
 
 .chat-input textarea:focus {
     outline: none;
     border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
 }
 
 .send-button {
@@ -119,11 +135,15 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: opacity 0.2s ease;
+    transition: all 0.2s ease;
+    position: absolute;
+    right: 1rem;
+    bottom: 1.5rem;
 }
 
 .send-button:hover {
     opacity: 0.9;
+    transform: scale(1.05);
 }
 
 .input-info {
@@ -139,6 +159,7 @@
     height: 100%;
     overflow-y: auto;
     padding: 1rem;
+    background: var(--bg-primary);
 }
 
 .section.active {
@@ -150,6 +171,7 @@
     margin-top: auto;
     padding: 1rem;
     border-top: 1px solid var(--button-secondary-border);
+    background: var(--bg-primary);
 }
 
 .user-info {
@@ -186,10 +208,12 @@
     color: var(--text-secondary);
     cursor: pointer;
     transition: color 0.2s ease;
+    border-radius: 6px;
 }
 
 .logout-button:hover {
     color: var(--text-primary);
+    background: var(--bg-secondary);
 }
 
 /* Integrations section specific styles */
